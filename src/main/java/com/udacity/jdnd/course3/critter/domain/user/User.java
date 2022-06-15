@@ -24,23 +24,6 @@ public class User {
 
     @Nationalized
     @Column(length = 100)
-    private String firstname;
-
-    @Nationalized
-    @Column(length = 100)
-    private String lastname;
-
-    @Column(length = 25)
-    private String phoneNumber;
-
-    @Column(length = 320)
-    private String emailAddress;
-
-    public User(String firstname, String lastname, String phoneNumber, String emailAddress) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.phoneNumber = phoneNumber;
-        this.emailAddress = emailAddress;
-    }
+    private String name;
 
 }

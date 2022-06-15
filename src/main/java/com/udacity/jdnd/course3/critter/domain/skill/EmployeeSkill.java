@@ -1,4 +1,4 @@
-package com.udacity.jdnd.course3.critter.domain.user.skill;
+package com.udacity.jdnd.course3.critter.domain.skill;
 
 
 import com.udacity.jdnd.course3.critter.domain.user.employee.Employee;
