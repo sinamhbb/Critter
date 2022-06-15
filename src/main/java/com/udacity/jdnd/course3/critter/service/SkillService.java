@@ -16,21 +16,16 @@ public class SkillService {
     @Autowired
     private SkillRepository skillRepository;
 
-    public Skill saveSkill(Skill skill) throws Throwable {
-        if (skill.getId() == null) {
-            return skillRepository.save(skill);
-        } else {
-            Optional<Skill> savedSkill = skillRepository.findById(skill.getId());
-            savedSkill.orElseThrow((Supplier<Throwable>) IndexOutOfBoundsException::new);
-            savedSkill.ifPresent(skillToBeUpdated -> {
-                skillRepository.save(skillToBeUpdated);
-            });
-            return savedSkill.get();
-        }
-    }
-
     public Skill getSkill(String skill) throws Throwable {
         return skillRepository.findByName(skill).orElseThrow((Supplier<Throwable>) IndexOutOfBoundsException::new);
+    }
+
+    public Skill saveSkill(Skill skill) throws Throwable {
+        if (skill.getId() != null) {
+            Optional<Skill> savedSkill = skillRepository.findById(skill.getId());
+            savedSkill.orElseThrow((Supplier<Throwable>) IndexOutOfBoundsException::new);
+        }
+        return skillRepository.save(skill);
     }
 
     public Long deleteSkill(Long id) throws Throwable {

@@ -29,4 +29,5 @@ public class Employee extends User {
     @ElementCollection
     private List<DayOfWeek> daysAvailable;
 
+
 }
