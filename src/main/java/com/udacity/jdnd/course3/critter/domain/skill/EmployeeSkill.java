@@ -11,7 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.Objects;
 
 @Entity
 @AllArgsConstructor
@@ -24,19 +24,32 @@ public class EmployeeSkill {
     @GeneratedValue
     private Long id;
 
-    @NotNull
-    @ManyToMany
-    @JoinTable(name = "employee_skill_level", joinColumns = @JoinColumn(name = "employee_skill_id"), inverseJoinColumns = @JoinColumn(name = "skill_id"))
-    private List<Skill> skills;
 
-    @NotNull
-    @ManyToMany
-    @JoinTable(name = "employee_skill_level", joinColumns = @JoinColumn(name = "employee_skill_id"), inverseJoinColumns = @JoinColumn(name = "employee_id"))
-    private List<Employee> employees;
+    @OneToOne(fetch = FetchType.EAGER)
+    private Skill skill;
 
     @Min(1)
     @Max(5)
     @NotNull
     private Integer level;
 
+    @ManyToOne
+    private Employee employee;
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        EmployeeSkill employeeSkill = (EmployeeSkill) obj;
+        return Objects.equals(employee, employeeSkill.employee);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(employee);
+    }
 }

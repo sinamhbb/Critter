@@ -1,7 +1,9 @@
 package com.udacity.jdnd.course3.critter;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.udacity.jdnd.course3.critter.controller.employee.EmployeeDTO;
+import com.udacity.jdnd.course3.critter.controller.employee.EmployeeRequestDTO;
+import com.udacity.jdnd.course3.critter.controller.employee.EmployeeSkill;
 import com.udacity.jdnd.course3.critter.controller.pet.PetController;
 import com.udacity.jdnd.course3.critter.controller.pet.PetDTO;
 import com.udacity.jdnd.course3.critter.controller.pet.PetType;
@@ -14,12 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * This is a set of functional tests to validate the basic capabilities desired for this application.
@@ -260,7 +259,7 @@ public class CritterFunctionalTest {
     private static EmployeeDTO createEmployeeDTO() {
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setName("TestEmployee");
-        employeeDTO.setSkills(Sets.newHashSet(EmployeeSkill.FEEDING, EmployeeSkill.PETTING));
+//        employeeDTO.setSkills(Sets.newHashSet(EmployeeSkill.FEEDING, EmployeeSkill.PETTING));
         return employeeDTO;
     }
     private static CustomerDTO createCustomerDTO() {

@@ -2,6 +2,7 @@ package com.udacity.jdnd.course3.critter.controller.skill;
 
 import com.udacity.jdnd.course3.critter.domain.skill.EmployeeSkill;
 import com.udacity.jdnd.course3.critter.service.EmployeeSkillService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +24,9 @@ public class EmployeeSkillController {
     }
 
     @PostMapping
-    public ResponseEntity<?> PostEmployeeSkill(@RequestBody EmployeeSkill employeeSkill) {
+    public ResponseEntity<?> PostEmployeeSkill(@RequestBody EmployeeSkillDTO employeeSkillDTOl) {
         try {
-            return ResponseEntity.ok(employeeSkillService.saveEmployeeSkill(employeeSkill));
+            return ResponseEntity.ok(employeeSkillService.saveEmployeeSkill(convertEmployeeSkillDTOToEmployeeSkill(employeeSkillDTOl)));
         } catch (Throwable t) {
             return ResponseEntity.badRequest().build();
         }
@@ -38,5 +39,17 @@ public class EmployeeSkillController {
         } catch (Throwable t) {
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    private static EmployeeSkillDTO convertEmployeeSkillToSKillDTO(EmployeeSkill employeeSkill) {
+        EmployeeSkillDTO employeeSkillDTO = new EmployeeSkillDTO();
+        BeanUtils.copyProperties(employeeSkill, employeeSkillDTO);
+        return employeeSkillDTO;
+    }
+
+    private static EmployeeSkill convertEmployeeSkillDTOToEmployeeSkill(EmployeeSkillDTO employeeSkillDTO) {
+        EmployeeSkill employeeSkill = new EmployeeSkill();
+        BeanUtils.copyProperties(employeeSkillDTO,employeeSkill);
+        return employeeSkill;
     }
 }

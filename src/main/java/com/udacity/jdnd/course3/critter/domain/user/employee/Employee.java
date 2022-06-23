@@ -1,17 +1,14 @@
 package com.udacity.jdnd.course3.critter.domain.user.employee;
 
 
-import com.udacity.jdnd.course3.critter.controller.user.EmployeeSkill;
+import com.udacity.jdnd.course3.critter.domain.skill.EmployeeSkill;
 import com.udacity.jdnd.course3.critter.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.DayOfWeek;
 import java.util.List;
 
@@ -22,12 +19,21 @@ import java.util.List;
 @Setter
 public class Employee extends User {
 
-    @Id
-    @GeneratedValue
-    private Long id;
-
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.LAZY)
     private List<DayOfWeek> daysAvailable;
 
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EmployeeSkill> skillLevels;
 
+
+    public void addSkillLevel(EmployeeSkill employeeSkill) {
+        skillLevels.add( employeeSkill );
+        employeeSkill.setEmployee( this );
+    }
+
+    public void removeSkillLevel(EmployeeSkill employeeSkill) {
+        skillLevels.remove( employeeSkill );
+        employeeSkill.setEmployee( null );
+    }
 }
+

@@ -22,8 +22,7 @@ public class SkillService {
 
     public Skill saveSkill(Skill skill) throws Throwable {
         if (skill.getId() != null) {
-            Optional<Skill> savedSkill = skillRepository.findById(skill.getId());
-            savedSkill.orElseThrow((Supplier<Throwable>) IndexOutOfBoundsException::new);
+            skillRepository.findById(skill.getId()).orElseThrow((Supplier<Throwable>) IndexOutOfBoundsException::new);
         }
         return skillRepository.save(skill);
     }

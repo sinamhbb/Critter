@@ -38,37 +38,4 @@ public class UserController {
         throw new UnsupportedOperationException();
     }
 
-    @PostMapping("/employee")
-    public EmployeeDTO saveEmployee(@RequestBody EmployeeDTO employeeDTO) {
-        Employee employee = convertEmployeeDTOToEmployee(employeeDTO);
-        return convertEmployeeToEmployeeDTO(userService.saveEmployee(employee));
-    }
-
-    @PostMapping("/employee/{employeeId}")
-    public EmployeeDTO getEmployee(@PathVariable long employeeId) {
-        throw new UnsupportedOperationException();
-    }
-
-    @PutMapping("/employee/{employeeId}")
-    public void setAvailability(@RequestBody Set<DayOfWeek> daysAvailable, @PathVariable long employeeId) {
-        throw new UnsupportedOperationException();
-    }
-
-    @GetMapping("/employee/availability")
-    public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
-        throw new UnsupportedOperationException();
-    }
-
-    private static EmployeeDTO convertEmployeeToEmployeeDTO(Employee employee) {
-        EmployeeDTO employeeDTO = new EmployeeDTO();
-        BeanUtils.copyProperties(employee, employeeDTO);
-        return employeeDTO;
-    }
-
-    private static Employee convertEmployeeDTOToEmployee(EmployeeDTO employeeDTO) {
-        Employee employee = new Employee();
-        BeanUtils.copyProperties(employeeDTO,employee);
-        return employee;
-    }
-
 }
