@@ -5,7 +5,7 @@ import com.udacity.jdnd.course3.critter.controller.skill.EmployeeSkillDTO;
 import com.udacity.jdnd.course3.critter.domain.skill.EmployeeSkill;
 import com.udacity.jdnd.course3.critter.domain.user.employee.Employee;
 import com.udacity.jdnd.course3.critter.service.EmployeeService;
-import com.udacity.jdnd.course3.critter.service.EmployeeSkillService;
+import com.udacity.jdnd.course3.critter.utility.DTOUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,9 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @Autowired
-    private EmployeeSkillService employeeSkillService;
+    private DTOUtils dtoUtils;
+
+
 
     @GetMapping
     public ResponseEntity<?> getEmployee(@RequestParam long id) {
@@ -35,14 +37,22 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<?> saveEmployee(@RequestBody Employee employee) {
+    public ResponseEntity<?> saveEmployee(@RequestBody EmployeeDTO employeeDTO) {
         try {
-
-            return ResponseEntity.ok(convertEmployeeToEmployeeDTO(employeeService.saveEmployee(employee)));
+            List<EmployeeSkill> employeeSkills = new ArrayList<>();
+            List<EmployeeSkillDTO> employeeSkillDTOS = employeeDTO.getSkillLevels();
+            employeeDTO.getSkillLevels().forEach(employeeSkillDTO -> {
+                employeeSkills.add(convertEmployeeSkillDTOToEmployeeSkill(employeeSkillDTO));
+            });
+            employeeDTO.setSkillLevels(new ArrayList<>());
+            Employee employee = convertEmployeeDTOToEmployee(employeeDTO);
+            employee.setSkillLevels(employeeSkills);
+            employee = employeeService.saveEmployee(employee);
+            employeeDTO.setId(employee.getId());
+            employeeDTO.setSkillLevels(employeeSkillDTOS);
+            return ResponseEntity.ok(employeeDTO);
         } catch (Throwable t) {
-//            System.out.println("error message: "+ t.getMessage());
-//            System.out.println("error message: "+ t.getLocalizedMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(employee);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(employeeDTO);
         }
     }
 
