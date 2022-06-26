@@ -10,15 +10,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class DTOUtils {
+
+
     public static EmployeeDTO convertEmployeeToEmployeeDTO(Employee employee) {
         EmployeeDTO employeeDTO = new EmployeeDTO();
+        List<EmployeeSkill> employeeSkills = employee.getSkillLevels();
+        List<EmployeeSkillDTO> employeeSkillDTOS = listConvertEmployeeSkillToEmployeeSkillDTO(employeeSkills);
+        employee.setSkillLevels(new ArrayList<>());
         BeanUtils.copyProperties(employee, employeeDTO);
+        employeeDTO.setSkillLevels(employeeSkillDTOS);
         return employeeDTO;
     }
 
     public static Employee convertEmployeeDTOToEmployee(EmployeeDTO employeeDTO) {
         Employee employee = new Employee();
+        List<EmployeeSkillDTO> employeeSkillDTOS = employeeDTO.getSkillLevels();
+        List<EmployeeSkill> employeeSkills = listConvertEmployeeSkillDTOToEmployeeSkill(employeeDTO.getSkillLevels());
+        employeeDTO.setSkillLevels(new ArrayList<>());
         BeanUtils.copyProperties(employeeDTO,employee);
+        employee.setSkillLevels(employeeSkills);
         return employee;
     }
 
@@ -40,5 +50,13 @@ public final class DTOUtils {
             employeeSkills.add(convertEmployeeSkillDTOToEmployeeSkill(employeeSkillDTO));
         });
         return employeeSkills;
+    }
+
+    public static List<EmployeeSkillDTO> listConvertEmployeeSkillToEmployeeSkillDTO(List<EmployeeSkill> employeeSkills) {
+        List<EmployeeSkillDTO> employeeSkillDTOS = new ArrayList<>();
+        employeeSkills.forEach(employeeSkill -> {
+            employeeSkillDTOS.add(convertEmployeeSkillToEmployeeSKillDTO(employeeSkill));
+        });
+        return employeeSkillDTOS;
     }
 }

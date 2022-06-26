@@ -22,42 +22,28 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    @Autowired
-    private DTOUtils dtoUtils;
-
-
-
     @GetMapping
-    public ResponseEntity<?> getEmployee(@RequestParam long id) {
+    public ResponseEntity<EmployeeDTO> getEmployee(@RequestParam long id) {
         try {
-            return ResponseEntity.ok(employeeService.getEmployee(id));
+            return ResponseEntity.ok(DTOUtils.convertEmployeeToEmployeeDTO(employeeService.getEmployee(id)));
         } catch (Throwable t) {
             return ResponseEntity.badRequest().build();
         }
     }
 
     @PostMapping
-    public ResponseEntity<?> saveEmployee(@RequestBody EmployeeDTO employeeDTO) {
+    public ResponseEntity<EmployeeDTO> saveEmployee(@RequestBody EmployeeDTO employeeDTO) {
         try {
-            List<EmployeeSkill> employeeSkills = new ArrayList<>();
-            List<EmployeeSkillDTO> employeeSkillDTOS = employeeDTO.getSkillLevels();
-            employeeDTO.getSkillLevels().forEach(employeeSkillDTO -> {
-                employeeSkills.add(convertEmployeeSkillDTOToEmployeeSkill(employeeSkillDTO));
-            });
-            employeeDTO.setSkillLevels(new ArrayList<>());
-            Employee employee = convertEmployeeDTOToEmployee(employeeDTO);
-            employee.setSkillLevels(employeeSkills);
-            employee = employeeService.saveEmployee(employee);
+            Employee employee = employeeService.saveEmployee(DTOUtils.convertEmployeeDTOToEmployee(employeeDTO));
             employeeDTO.setId(employee.getId());
-            employeeDTO.setSkillLevels(employeeSkillDTOS);
             return ResponseEntity.ok(employeeDTO);
         } catch (Throwable t) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(employeeDTO);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deleteEmployee(@RequestParam Long id) {
+    public ResponseEntity<Long> deleteEmployee(@RequestParam Long id) {
         try {
             return ResponseEntity.ok(employeeService.deleteEmployee(id));
         } catch (Throwable t) {
@@ -68,29 +54,5 @@ public class EmployeeController {
     @GetMapping("/availability")
     public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
         throw new UnsupportedOperationException();
-    }
-
-    private static EmployeeDTO convertEmployeeToEmployeeDTO(Employee employee) {
-        EmployeeDTO employeeDTO = new EmployeeDTO();
-        BeanUtils.copyProperties(employee, employeeDTO);
-        return employeeDTO;
-    }
-
-    private static Employee convertEmployeeDTOToEmployee(EmployeeDTO employeeDTO) {
-        Employee employee = new Employee();
-        BeanUtils.copyProperties(employeeDTO,employee);
-        return employee;
-    }
-
-    private static EmployeeSkillDTO convertEmployeeSkillToSKillDTO(EmployeeSkill employeeSkill) {
-        EmployeeSkillDTO employeeSkillDTO = new EmployeeSkillDTO();
-        BeanUtils.copyProperties(employeeSkill, employeeSkillDTO);
-        return employeeSkillDTO;
-    }
-
-    private static EmployeeSkill convertEmployeeSkillDTOToEmployeeSkill(EmployeeSkillDTO employeeSkillDTO) {
-        EmployeeSkill employeeSkill = new EmployeeSkill();
-        BeanUtils.copyProperties(employeeSkillDTO,employeeSkill);
-        return employeeSkill;
     }
 }
