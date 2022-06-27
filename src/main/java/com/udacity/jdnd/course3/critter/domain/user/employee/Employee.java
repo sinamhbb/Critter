@@ -10,7 +10,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.DayOfWeek;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -20,10 +20,10 @@ import java.util.List;
 public class Employee extends User {
 
     @ElementCollection(fetch = FetchType.LAZY)
-    private List<DayOfWeek> daysAvailable;
+    private Set<DayOfWeek> daysAvailable;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<EmployeeSkill> skillLevels;
+    private Set<EmployeeSkill> skillLevels;
 
 
     public void addSkillLevel(EmployeeSkill employeeSkill) {

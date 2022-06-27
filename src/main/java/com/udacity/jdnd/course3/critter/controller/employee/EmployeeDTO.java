@@ -1,14 +1,13 @@
 package com.udacity.jdnd.course3.critter.controller.employee;
 
 import com.udacity.jdnd.course3.critter.controller.skill.EmployeeSkillDTO;
-import com.udacity.jdnd.course3.critter.domain.skill.EmployeeSkill;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.DayOfWeek;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Represents the form that employee request and response data takes. Does not map
@@ -22,7 +21,7 @@ import java.util.List;
 public class EmployeeDTO {
     private Long id;
     private String name;
-    private List<EmployeeSkillDTO> skillLevels;
-    private List<DayOfWeek> daysAvailable;
+    private Set<EmployeeSkillDTO> skillLevels;
+    private Set<DayOfWeek> daysAvailable;
 
 }

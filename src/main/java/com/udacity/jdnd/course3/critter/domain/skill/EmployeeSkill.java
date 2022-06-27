@@ -33,7 +33,7 @@ public class EmployeeSkill {
     @NotNull
     private Integer level;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Employee employee;
 
     @Override

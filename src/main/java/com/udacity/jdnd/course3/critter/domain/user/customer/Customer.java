@@ -18,6 +18,8 @@ import java.util.List;
 @Setter
 public class Customer extends User {
 
+    private String phoneNumber;
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Pet> pets;
 

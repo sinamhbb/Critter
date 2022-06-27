@@ -22,4 +22,6 @@ public class EmployeeSkillDTO {
     @Min(1)
     private Integer level;
 
+    private Long employeeId;
+
 }
