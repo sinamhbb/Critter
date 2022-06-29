@@ -2,7 +2,7 @@ package com.udacity.jdnd.course3.critter.controller.schedule;
 
 import com.udacity.jdnd.course3.critter.controller.employee.EmployeeSkill;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -14,7 +14,7 @@ public class ScheduleDTO {
     private long id;
     private List<Long> employeeIds;
     private List<Long> petIds;
-    private LocalDate date;
+    private Date date;
     private Set<EmployeeSkill> activities;
 
     public long getId(){
@@ -41,11 +41,11 @@ public class ScheduleDTO {
         this.petIds = petIds;
     }
 
-    public LocalDate getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

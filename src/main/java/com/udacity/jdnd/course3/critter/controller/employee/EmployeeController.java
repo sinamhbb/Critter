@@ -2,6 +2,7 @@ package com.udacity.jdnd.course3.critter.controller.employee;
 
 
 import com.udacity.jdnd.course3.critter.controller.skill.EmployeeSkillDTO;
+import com.udacity.jdnd.course3.critter.domain.skill.EmployeeSkill;
 import com.udacity.jdnd.course3.critter.domain.user.employee.Employee;
 import com.udacity.jdnd.course3.critter.service.EmployeeService;
 import com.udacity.jdnd.course3.critter.utility.DTOUtils;
@@ -44,6 +45,7 @@ public class EmployeeController {
     @PutMapping
     public ResponseEntity<Set<EmployeeSkillDTO>> saveEmployeeSkills(@RequestBody Set<EmployeeSkillDTO> employeeSkillDTOs) {
         try {
+            Set<EmployeeSkill> employeeSkill = employeeService.saveEmployeeSkills(DTOUtils.listConvertEmployeeSkillDTOToEmployeeSkill(employeeSkillDTOs));
             return ResponseEntity.ok(DTOUtils.listConvertEmployeeSkillToEmployeeSkillDTO(employeeService.saveEmployeeSkills(DTOUtils.listConvertEmployeeSkillDTOToEmployeeSkill(employeeSkillDTOs))));
         } catch (Throwable t) {
             System.out.println(t);

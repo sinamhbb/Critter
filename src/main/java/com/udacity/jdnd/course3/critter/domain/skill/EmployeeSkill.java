@@ -1,6 +1,7 @@
 package com.udacity.jdnd.course3.critter.domain.skill;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.udacity.jdnd.course3.critter.domain.user.employee.Employee;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,6 +27,7 @@ public class EmployeeSkill {
 
 
     @OneToOne(fetch = FetchType.EAGER)
+//    @JsonIgnoreProperties(value = {"applications", "hibernateLazyInitializer"})
     private Skill skill;
 
     @Min(1)
@@ -33,7 +35,7 @@ public class EmployeeSkill {
     @NotNull
     private Integer level;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Employee employee;
 
     @Override

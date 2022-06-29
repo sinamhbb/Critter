@@ -3,6 +3,7 @@ package com.udacity.jdnd.course3.critter.utility;
 import com.udacity.jdnd.course3.critter.controller.employee.EmployeeDTO;
 import com.udacity.jdnd.course3.critter.controller.skill.EmployeeSkillDTO;
 import com.udacity.jdnd.course3.critter.domain.skill.EmployeeSkill;
+import com.udacity.jdnd.course3.critter.domain.skill.Skill;
 import com.udacity.jdnd.course3.critter.domain.user.employee.Employee;
 import org.springframework.beans.BeanUtils;
 
@@ -23,7 +24,6 @@ public final class DTOUtils {
 
     public static Employee convertEmployeeDTOToEmployee(EmployeeDTO employeeDTO) {
         Employee employee = new Employee();
-        Set<EmployeeSkillDTO> employeeSkillDTOS = employeeDTO.getSkillLevels();
         Set<EmployeeSkill> employeeSkills = listConvertEmployeeSkillDTOToEmployeeSkill(employeeDTO.getSkillLevels());
         employeeDTO.setSkillLevels(new HashSet<>());
         BeanUtils.copyProperties(employeeDTO,employee);

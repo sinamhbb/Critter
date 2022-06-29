@@ -7,8 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,8 +16,8 @@ public class EmployeeSkillDTO {
     private Long id;
 
     private Skill skill;
-    @Max(5)
-    @Min(1)
+//    @Max(5)
+//    @Min(1)
     private Integer level;
 
     private Long employeeId;

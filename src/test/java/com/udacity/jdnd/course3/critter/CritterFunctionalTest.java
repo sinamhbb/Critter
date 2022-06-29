@@ -293,7 +293,7 @@ public class CritterFunctionalTest {
         ScheduleDTO scheduleDTO = new ScheduleDTO();
         scheduleDTO.setPetIds(petIds);
         scheduleDTO.setEmployeeIds(employeeIds);
-        scheduleDTO.setDate(date);
+//        scheduleDTO.setDate(date);
         scheduleDTO.setActivities(activities);
         return scheduleDTO;
     }

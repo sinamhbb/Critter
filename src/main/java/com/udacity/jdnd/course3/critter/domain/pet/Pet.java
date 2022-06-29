@@ -31,7 +31,7 @@ public class Pet {
     private String name;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Customer> owner;
+    private List<Customer> owners;
 
     @Temporal(TemporalType.DATE)
     private Date birthDate;
