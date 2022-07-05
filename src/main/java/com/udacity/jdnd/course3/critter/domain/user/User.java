@@ -18,6 +18,11 @@ import javax.persistence.MappedSuperclass;
 @Getter
 @Setter
 public class User {
+
+    public User(Long id) {
+        this.id = id;
+    }
+
     @Id
     @GeneratedValue
     private Long id;
@@ -25,5 +30,7 @@ public class User {
     @Nationalized
     @Column(length = 100)
     private String name;
+
+
 
 }

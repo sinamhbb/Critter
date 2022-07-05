@@ -20,9 +20,17 @@ public class Customer extends User {
 
     private String phoneNumber;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "customers",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Pet> pets;
 
     @Column(length = 500)
     private String notes;
+
+    public void addPet(Pet pet) {
+        pets.add(pet);
+    }
+
+    public void removePet(Pet pet) {
+        pets.remove(pet);
+    }
 }

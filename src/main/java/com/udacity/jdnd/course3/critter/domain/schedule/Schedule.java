@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -34,7 +34,7 @@ public class Schedule {
     @JoinTable(name = "schedule_employee_pet", joinColumns = {@JoinColumn(name = "schedule_id")}, inverseJoinColumns = @JoinColumn(name = "pet_id"))
     private List<Pet> pet;
 
-    private Date date;
+    private LocalDate date;
 
     @ManyToMany
     @JoinTable(name = "schedule_employee_pet", joinColumns = {@JoinColumn(name = "schedule_id")}, inverseJoinColumns = @JoinColumn(name = "employee_skill_id"))

@@ -9,8 +9,10 @@ import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+
 
 @Entity
 @AllArgsConstructor
@@ -23,19 +25,26 @@ public class Pet {
     @GeneratedValue
     private Long id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     private PetType type;
 
     @Column(length = 100)
     @Nationalized
     private String name;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Customer> owners;
+    @ManyToMany(cascade = CascadeType.REMOVE,fetch = FetchType.LAZY)
+    private List<Customer> customers = new ArrayList<>();
 
-    @Temporal(TemporalType.DATE)
-    private Date birthDate;
+    private LocalDate birthDate;
 
-
+    @Column(length = 500)
     private String notes;
+
+    public void addCustomer(Customer customer) {
+        customers.add( customer );
+    }
+
+    public void removeCustomer(Customer customer) {
+        customers.remove( customer );
+    }
 }
