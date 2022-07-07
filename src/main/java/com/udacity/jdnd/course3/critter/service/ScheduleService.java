@@ -26,6 +26,4 @@ public class ScheduleService {
         return scheduleRepository.findAllByPetId(id);
     }
 
-
-
 }

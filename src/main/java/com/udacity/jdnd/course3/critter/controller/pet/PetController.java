@@ -42,7 +42,7 @@ public class PetController {
     }
 
     @GetMapping("/{petId}")
-    public ResponseEntity<PetDTO> getPet(@PathVariable long petId) throws Throwable {
+    public ResponseEntity<PetDTO> getPet(@PathVariable Long petId) throws Throwable {
         try {
             Pet pet = petService.getPet(petId);
             PetDTO petDTO = mapper.map(pet, PetDTO.class);

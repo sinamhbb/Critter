@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,7 +22,7 @@ public class Customer extends User {
     private String phoneNumber;
 
     @ManyToMany(mappedBy = "customers",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Pet> pets;
+    private List<Pet> pets = new ArrayList<>();
 
     @Column(length = 500)
     private String notes;

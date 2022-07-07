@@ -26,17 +26,18 @@ public class Schedule {
     @GeneratedValue
     private long id;
 
-    @ManyToMany
-    @JoinTable(name = "schedule_employee_pet", joinColumns = {@JoinColumn(name = "schedule_id")}, inverseJoinColumns = @JoinColumn(name = "employee_id"))
-    private List<Employee> employee;
-
-    @ManyToMany
-    @JoinTable(name = "schedule_employee_pet", joinColumns = {@JoinColumn(name = "schedule_id")}, inverseJoinColumns = @JoinColumn(name = "pet_id"))
-    private List<Pet> pet;
-
     private LocalDate date;
 
+//    @ManyToMany
+//    @JoinTable(name = "schedule_employee_pet", joinColumns = {@JoinColumn(name = "schedule_id")}, inverseJoinColumns = @JoinColumn(name = "employee_id"))
+//    private List<Employee> employee;
+
     @ManyToMany
-    @JoinTable(name = "schedule_employee_pet", joinColumns = {@JoinColumn(name = "schedule_id")}, inverseJoinColumns = @JoinColumn(name = "employee_skill_id"))
-    private Set<Skill> activities;
+//    @JoinTable(name = "schedule_employee_pet", joinColumns = {@JoinColumn(name = "schedule_id")}, inverseJoinColumns = @JoinColumn(name = "pet_id"))
+    private List<Pet> pet;
+
+
+    @ManyToMany
+//    @JoinTable(name = "schedule_employee_pet", joinColumns = {@JoinColumn(name = "schedule_id")}, inverseJoinColumns = @JoinColumn(name = "employee_skill_id"))
+    private Set<EmployeeSkill> activities;
 }
