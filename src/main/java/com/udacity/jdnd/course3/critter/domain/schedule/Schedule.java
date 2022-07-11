@@ -3,7 +3,7 @@ package com.udacity.jdnd.course3.critter.domain.schedule;
 
 import com.udacity.jdnd.course3.critter.domain.pet.Pet;
 import com.udacity.jdnd.course3.critter.domain.skill.EmployeeSkill;
-import com.udacity.jdnd.course3.critter.domain.skill.Skill;
+import com.udacity.jdnd.course3.critter.domain.user.customer.Customer;
 import com.udacity.jdnd.course3.critter.domain.user.employee.Employee;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +13,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -28,16 +27,10 @@ public class Schedule {
 
     private LocalDate date;
 
-//    @ManyToMany
-//    @JoinTable(name = "schedule_employee_pet", joinColumns = {@JoinColumn(name = "schedule_id")}, inverseJoinColumns = @JoinColumn(name = "employee_id"))
-//    private List<Employee> employee;
+    @ManyToMany
+    private List<Pet> pets;
 
     @ManyToMany
-//    @JoinTable(name = "schedule_employee_pet", joinColumns = {@JoinColumn(name = "schedule_id")}, inverseJoinColumns = @JoinColumn(name = "pet_id"))
-    private List<Pet> pet;
+    private List<EmployeeSkill> activities;
 
-
-    @ManyToMany
-//    @JoinTable(name = "schedule_employee_pet", joinColumns = {@JoinColumn(name = "schedule_id")}, inverseJoinColumns = @JoinColumn(name = "employee_skill_id"))
-    private Set<EmployeeSkill> activities;
 }

@@ -1,10 +1,7 @@
 package com.udacity.jdnd.course3.critter.controller.schedule;
 
-import com.udacity.jdnd.course3.critter.controller.employee.EmployeeSkill;
-
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Represents the form that schedule request and response data takes. Does not map
@@ -12,10 +9,10 @@ import java.util.Set;
  */
 public class ScheduleDTO {
     private long id;
-    private List<Long> employeeIds;
+//    private List<Long> employeeIds;
     private List<Long> petIds;
     private LocalDate date;
-    private Set<EmployeeSkill> activities;
+    private List<Long> activityIds;
 
     public long getId(){
         return id;
@@ -25,13 +22,13 @@ public class ScheduleDTO {
         this.id = id;
     }
     
-    public List<Long> getEmployeeIds() {
-        return employeeIds;
-    }
-
-    public void setEmployeeIds(List<Long> employeeIds) {
-        this.employeeIds = employeeIds;
-    }
+//    public List<Long> getEmployeeIds() {
+//        return employeeIds;
+//    }
+//
+//    public void setEmployeeIds(List<Long> employeeIds) {
+//        this.employeeIds = employeeIds;
+//    }
 
     public List<Long> getPetIds() {
         return petIds;
@@ -49,11 +46,11 @@ public class ScheduleDTO {
         this.date = date;
     }
 
-    public Set<EmployeeSkill> getActivities() {
-        return activities;
+    public List<Long> getActivityIds() {
+        return activityIds;
     }
 
-    public void setActivities(Set<EmployeeSkill> activities) {
-        this.activities = activities;
+    public void setActivityIds(List<Long> activityIds) {
+        this.activityIds = activityIds;
     }
 }

@@ -2,6 +2,7 @@ package com.udacity.jdnd.course3.critter.controller.schedule;
 
 import com.udacity.jdnd.course3.critter.domain.schedule.Schedule;
 import com.udacity.jdnd.course3.critter.service.ScheduleService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,19 +18,23 @@ public class ScheduleController {
     @Autowired
     private ScheduleService scheduleService;
 
+    private final ModelMapper mapper = new ModelMapper();
+
     @PostMapping
-    public Schedule createSchedule(@RequestBody Schedule schedule) {
-        return scheduleService.createSchedule(schedule);
+    public ScheduleDTO createSchedule(@RequestBody ScheduleDTO scheduleDTO) {
+        Schedule schedule = scheduleService.createSchedule(scheduleDTO);
+        scheduleDTO.setId(schedule.getId());
+        return scheduleDTO;
     }
 
     @GetMapping
-    public List<Schedule> getAllSchedules() {
-        return scheduleService.getAllSchedules();
+    public List<ScheduleDTO> getAllSchedules() {
+        throw new UnsupportedOperationException();
     }
 
     @GetMapping("/pet/{petId}")
-    public List<Schedule> getScheduleForPet(@PathVariable long petId) {
-        return scheduleService.getScheduleForPet(petId);
+    public List<ScheduleDTO> getScheduleForPet(@PathVariable long petId) {
+        throw new UnsupportedOperationException();
     }
 
     @GetMapping("/employee/{employeeId}")

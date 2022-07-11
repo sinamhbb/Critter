@@ -9,9 +9,8 @@ import com.udacity.jdnd.course3.critter.controller.pet.PetController;
 import com.udacity.jdnd.course3.critter.controller.pet.PetDTO;
 import com.udacity.jdnd.course3.critter.controller.schedule.ScheduleController;
 import com.udacity.jdnd.course3.critter.controller.schedule.ScheduleDTO;
-import com.udacity.jdnd.course3.critter.controller.user.*;
+import com.udacity.jdnd.course3.critter.controller.customer.*;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -286,14 +285,14 @@ public class CritterFunctionalTest {
         return employeeRequestDTO;
     }
 
-    private static ScheduleDTO createScheduleDTO(List<Long> petIds, List<Long> employeeIds, LocalDate date, Set<EmployeeSkill> activities) {
-        ScheduleDTO scheduleDTO = new ScheduleDTO();
-        scheduleDTO.setPetIds(petIds);
-        scheduleDTO.setEmployeeIds(employeeIds);
-//        scheduleDTO.setDate(date);
-        scheduleDTO.setActivities(activities);
-        return scheduleDTO;
-    }
+//    private static ScheduleDTO createScheduleDTO(List<Long> petIds, List<Long> employeeIds, LocalDate date, Set<EmployeeSkill> activities) {
+//        ScheduleDTO scheduleDTO = new ScheduleDTO();
+//        scheduleDTO.setPetIds(petIds);
+//        scheduleDTO.setEmployeeIds(employeeIds);
+////        scheduleDTO.setDate(date);
+//        scheduleDTO.setActivityIds(activities);
+//        return scheduleDTO;
+//    }
 
 //    private ScheduleDTO populateSchedule(int numEmployees, int numPets, LocalDate date, Set<EmployeeSkill> activities) {
 //        List<Long> employeeIds = IntStream.range(0, numEmployees)
@@ -313,11 +312,11 @@ public class CritterFunctionalTest {
 //        return scheduleController.createSchedule(createScheduleDTO(petIds, employeeIds, date, activities));
 //    }
 
-    private static void compareSchedules(ScheduleDTO sched1, ScheduleDTO sched2) {
-        Assertions.assertEquals(sched1.getPetIds(), sched2.getPetIds());
-        Assertions.assertEquals(sched1.getActivities(), sched2.getActivities());
-        Assertions.assertEquals(sched1.getEmployeeIds(), sched2.getEmployeeIds());
-        Assertions.assertEquals(sched1.getDate(), sched2.getDate());
-    }
+//    private static void compareSchedules(ScheduleDTO sched1, ScheduleDTO sched2) {
+//        Assertions.assertEquals(sched1.getPetIds(), sched2.getPetIds());
+//        Assertions.assertEquals(sched1.getActivityIds(), sched2.getActivityIds());
+//        Assertions.assertEquals(sched1.getEmployeeIds(), sched2.getEmployeeIds());
+//        Assertions.assertEquals(sched1.getDate(), sched2.getDate());
+//    }
 
 }

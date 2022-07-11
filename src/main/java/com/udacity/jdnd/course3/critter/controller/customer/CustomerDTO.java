@@ -1,4 +1,4 @@
-package com.udacity.jdnd.course3.critter.controller.user;
+package com.udacity.jdnd.course3.critter.controller.customer;
 
 import java.util.List;
 

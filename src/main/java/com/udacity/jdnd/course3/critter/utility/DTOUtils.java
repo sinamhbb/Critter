@@ -1,7 +1,10 @@
 package com.udacity.jdnd.course3.critter.utility;
 
 import com.udacity.jdnd.course3.critter.controller.employee.EmployeeDTO;
+import com.udacity.jdnd.course3.critter.controller.schedule.ScheduleDTO;
 import com.udacity.jdnd.course3.critter.controller.skill.EmployeeSkillDTO;
+import com.udacity.jdnd.course3.critter.domain.pet.Pet;
+import com.udacity.jdnd.course3.critter.domain.schedule.Schedule;
 import com.udacity.jdnd.course3.critter.domain.skill.EmployeeSkill;
 import com.udacity.jdnd.course3.critter.domain.user.employee.Employee;
 import org.springframework.beans.BeanUtils;
@@ -60,4 +63,23 @@ public final class DTOUtils {
         });
         return employeeSkillDTOS;
     }
+
+//    ---------------- Schedule
+//    public static Schedule convertScheduleDTOToEntity(ScheduleDTO scheduleDTO) {
+//        List<Employee> employees = new ArrayList<Employee>();
+//        scheduleDTO.getEmployeeIds().forEach(id -> {
+//            Employee employee = new Employee();
+//            employee.setId(id);
+//            employees.add(employee);
+//        });
+//        List<Pet> pets = new ArrayList<>();
+//        scheduleDTO.getPetIds().forEach(id -> {
+//            Pet pet = new Pet();
+//            pet.setId(id);
+//            pets.add(pet);
+//        });
+//
+//        return new Schedule();
+//    }
+
 }
