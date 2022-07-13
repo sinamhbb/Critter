@@ -5,11 +5,13 @@ import com.udacity.jdnd.course3.critter.domain.pet.PetType;
 import com.udacity.jdnd.course3.critter.domain.pet.PetTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Service
+@Transactional
 public class PetTypeService {
     @Autowired
     private PetTypeRepository petTypeRepository;
