@@ -8,17 +8,12 @@ import com.udacity.jdnd.course3.critter.controller.employee.EmployeeSkill;
 import com.udacity.jdnd.course3.critter.controller.pet.PetController;
 import com.udacity.jdnd.course3.critter.controller.pet.PetDTO;
 import com.udacity.jdnd.course3.critter.controller.schedule.ScheduleController;
-import com.udacity.jdnd.course3.critter.controller.schedule.ScheduleDTO;
 import com.udacity.jdnd.course3.critter.controller.user.*;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Set;
 
 /**
  * This is a set of functional tests to validate the basic capabilities desired for this application.
@@ -59,6 +54,7 @@ public class CritterFunctionalTest {
 
     @Autowired
     private ScheduleController scheduleController;
+
 
 //    @Test
 //    public void testCreateCustomer(){

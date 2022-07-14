@@ -3,6 +3,7 @@ package com.udacity.jdnd.course3.critter.controller.schedule;
 
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,11 +12,11 @@ import java.util.List;
  */
 public class ScheduleDTO {
     private long id;
-    private List<Long> employeeIds;
-    private List<Long> petIds;
+    private List<Long> employeeIds = new ArrayList<>();
+    private List<Long> petIds = new ArrayList<>();
     private LocalDate date;
-    private List<Long> activityIds;
-    private List<Long> customersIds;
+    private List<Long> activityIds = new ArrayList<>();
+    private List<Long> customersIds = new ArrayList<>();
 
     public long getId(){
         return id;

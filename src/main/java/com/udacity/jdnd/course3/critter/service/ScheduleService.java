@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -18,7 +19,12 @@ public class ScheduleService {
     private ScheduleRepository scheduleRepository;
 
     public Schedule createSchedule(Schedule schedule) {
-        return scheduleRepository.save(schedule);
+        if (schedule.getDate().isAfter(LocalDate.now())) {
+            System.out.println("Customer id: " + schedule.getCustomers().get(0).getId());
+            return scheduleRepository.save(schedule);
+        } else {
+            throw new IllegalArgumentException("Schedule Date is not valid");
+        }
     }
 
     public List<Schedule> getAllSchedules() {

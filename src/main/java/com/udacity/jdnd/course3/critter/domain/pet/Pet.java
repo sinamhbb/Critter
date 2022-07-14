@@ -40,6 +40,10 @@ public class Pet {
     @Column(length = 500)
     private String notes;
 
+    public Pet(Long id) {
+        this.id = id;
+    }
+
     public void addCustomer(Customer customer) {
         customers.add( customer );
     }

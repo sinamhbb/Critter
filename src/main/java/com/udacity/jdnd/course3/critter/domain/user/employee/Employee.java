@@ -25,6 +25,9 @@ public class Employee extends User {
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<EmployeeSkill> skillLevels;
 
+    public Employee(Long id) {
+        super(id);
+    }
 
     public void addSkillLevel(EmployeeSkill employeeSkill) {
         skillLevels.add( employeeSkill );

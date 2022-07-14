@@ -38,6 +38,10 @@ public class EmployeeSkill {
     @ManyToOne(fetch = FetchType.LAZY)
     private Employee employee;
 
+    public EmployeeSkill(Long id) {
+        this.id = id;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

@@ -27,6 +27,10 @@ public class Customer extends User {
     @Column(length = 500)
     private String notes;
 
+    public Customer(Long id) {
+        super(id);
+    }
+
     public void addPet(Pet pet) {
         pets.add(pet);
     }
