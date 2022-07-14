@@ -12,6 +12,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -28,9 +29,30 @@ public class Schedule {
     private LocalDate date;
 
     @ManyToMany
-    private List<Pet> pets;
+    private List<Employee> employees = new ArrayList<>();
 
     @ManyToMany
-    private List<EmployeeSkill> activities;
+    private List<Pet> pets = new ArrayList<>();
 
+    @ManyToMany
+    private List<EmployeeSkill> activities = new ArrayList<>();
+
+    @ManyToMany
+    private List<Customer> customers = new ArrayList<>();
+
+    public void addEmployee(Employee employee) {
+        this.employees.add(employee);
+    }
+
+    public void addPet(Pet pet) {
+        this.pets.add(pet);
+    }
+
+    public void addActivity(EmployeeSkill employeeSkill) {
+        this.activities.add(employeeSkill);
+    }
+
+    public void addCustomer(Customer customer) {
+        this.customers.add(customer);
+    }
 }

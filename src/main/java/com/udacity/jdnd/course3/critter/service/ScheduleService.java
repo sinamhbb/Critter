@@ -1,72 +1,53 @@
 package com.udacity.jdnd.course3.critter.service;
 
 
-import com.udacity.jdnd.course3.critter.controller.schedule.ScheduleDTO;
-import com.udacity.jdnd.course3.critter.domain.pet.Pet;
-import com.udacity.jdnd.course3.critter.domain.pet.PetRepository;
 import com.udacity.jdnd.course3.critter.domain.schedule.Schedule;
 import com.udacity.jdnd.course3.critter.domain.schedule.ScheduleRepository;
-import com.udacity.jdnd.course3.critter.domain.skill.EmployeeSkill;
-import com.udacity.jdnd.course3.critter.domain.skill.EmployeeSkillRepository;
-import com.udacity.jdnd.course3.critter.domain.user.employee.Employee;
-import com.udacity.jdnd.course3.critter.domain.user.employee.EmployeeRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.function.Supplier;
 
 @Service
+@Transactional
 public class ScheduleService {
 
     @Autowired
     private ScheduleRepository scheduleRepository;
 
-    @Autowired
-    private PetRepository petRepository;
-
-    @Autowired
-    private EmployeeRepository employeeRepository;
-
-    @Autowired
-    private EmployeeSkillRepository employeeSkillRepository;
-
-    private final ModelMapper mapper = new ModelMapper();
-
-    public Schedule createSchedule(ScheduleDTO scheduleDTO) {
-        long startTime = System.currentTimeMillis();
-        Schedule schedule = mapper.map(scheduleDTO, Schedule.class);
-
-//        List<Employee> employees = new ArrayList<>();
-//        scheduleDTO.getEmployeeIds().forEach(id -> {
-//            employees.add(employeeRepository.findById(id).get());
-//        });
-
-        List<Pet> pets = new ArrayList<>();
-        scheduleDTO.getPetIds().forEach(id -> {
-            pets.add(petRepository.findById(id).get());
-        });
-
-        List<EmployeeSkill> activities = new ArrayList<>();
-        scheduleDTO.getActivityIds().forEach(id -> {
-            activities.add(employeeSkillRepository.findById(id).get());
-        });
-
-//        schedule.setEmployees(employees);
-        schedule.setPets(pets);
-        schedule.setActivities(activities);
-        long endTime = System.currentTimeMillis();
-        System.out.println("time: " + (endTime  - startTime)); //134920200
-        return scheduleRepository.save(schedule);
+    public Schedule createSchedule(Schedule schedule) {
+        if (schedule.getDate().isAfter(LocalDate.now())) {
+            System.out.println("Customer id: " + schedule.getCustomers().get(0).getId());
+            return scheduleRepository.save(schedule);
+        } else {
+            throw new IllegalArgumentException("Schedule Date is not valid");
+        }
     }
 
     public List<Schedule> getAllSchedules() {
         return scheduleRepository.findAll();
     }
 
-    public List<Schedule> getScheduleForPet(Long id) {
-        return scheduleRepository.findAllByPetsId(id);
+    public List<Schedule> getSchedulesByEmployeesId(Long id) throws Throwable {
+        return scheduleRepository.findAllByEmployeesId(id).orElseThrow((Supplier<Throwable>) IndexOutOfBoundsException::new);
     }
 
+    public List<Schedule> getScheduleForPet(Long id) throws Throwable {
+        return scheduleRepository.findAllByPetsId(id).orElseThrow((Supplier<Throwable>) IndexOutOfBoundsException::new);
+    }
+
+    public List<Schedule> getScheduleByPetsId(Long id) throws Throwable {
+        return scheduleRepository.findAllByPetsId(id).orElseThrow((Supplier<Throwable>) IndexOutOfBoundsException::new);
+    }
+
+    public List<Schedule> getScheduleByActivitiesId(Long id) throws Throwable {
+        return scheduleRepository.findAllByActivitiesId(id).orElseThrow((Supplier<Throwable>) IndexOutOfBoundsException::new);
+    }
+
+    public List<Schedule> getScheduleByCustomersId(Long id) throws Throwable {
+        return scheduleRepository.findAllByCustomersId(id).orElseThrow((Supplier<Throwable>) IndexOutOfBoundsException::new);
+    }
 }

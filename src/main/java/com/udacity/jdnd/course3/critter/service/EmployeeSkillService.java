@@ -5,11 +5,13 @@ import com.udacity.jdnd.course3.critter.domain.skill.EmployeeSkill;
 import com.udacity.jdnd.course3.critter.domain.skill.EmployeeSkillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.function.Supplier;
 
 @Service
+@Transactional
 public class EmployeeSkillService {
 
     @Autowired
