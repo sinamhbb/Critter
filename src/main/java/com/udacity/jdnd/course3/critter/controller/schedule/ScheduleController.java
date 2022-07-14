@@ -65,6 +65,20 @@ public class ScheduleController {
         return mapper.map(scheduleDTO, Schedule.class);
     }
 
+    private List<Schedule> DTOListToScheduleList(List<ScheduleDTO> scheduleDTOs) {
+        return mapper.map(scheduleDTOs, new TypeToken<List<Schedule>>() {
+        }.getType());
+    }
+
+    private ScheduleDTO scheduleToDTO(Schedule schedule) {
+        return mapper.map(schedule, ScheduleDTO.class);
+    }
+
+    private List<ScheduleDTO> scheduleListToDTOList(List<Schedule> schedules) {
+        return mapper.map(schedules, new TypeToken<List<ScheduleDTO>>() {
+        }.getType());
+    }
+
 
     @PostMapping
     public ResponseEntity<ScheduleDTO> createSchedule(@RequestBody ScheduleDTO scheduleDTO) {
@@ -82,8 +96,7 @@ public class ScheduleController {
     public ResponseEntity<List<ScheduleDTO>> getAllSchedules() {
 
         try {
-            return ResponseEntity.ok(mapper.map(scheduleService.getAllSchedules(), new TypeToken<List<ScheduleDTO>>() {
-            }.getType()));
+            return ResponseEntity.ok(scheduleListToDTOList(scheduleService.getAllSchedules()));
         } catch (Throwable t) {
             System.out.println(t.getMessage());
             return ResponseEntity.badRequest().build();
@@ -93,8 +106,7 @@ public class ScheduleController {
     @GetMapping("/pet/{petId}")
     public ResponseEntity<List<ScheduleDTO>> getScheduleForPet(@PathVariable long petId) throws Throwable {
         try {
-            return ResponseEntity.ok(mapper.map(scheduleService.getScheduleByPetsId(petId), new TypeToken<List<ScheduleDTO>>() {
-            }.getType()));
+            return ResponseEntity.ok(scheduleListToDTOList(scheduleService.getScheduleByPetsId(petId)));
         } catch (Throwable t) {
             System.out.println(t.getMessage());
             return ResponseEntity.badRequest().build();
@@ -104,8 +116,7 @@ public class ScheduleController {
     @GetMapping("/employee/{employeeId}")
     public ResponseEntity<List<ScheduleDTO>> getScheduleForEmployee(@PathVariable long employeeId) {
         try {
-            return ResponseEntity.ok(mapper.map(scheduleService.getSchedulesByEmployeesId(employeeId), new TypeToken<List<ScheduleDTO>>() {
-            }.getType()));
+            return ResponseEntity.ok(scheduleListToDTOList(scheduleService.getSchedulesByEmployeesId(employeeId)));
         } catch (Throwable t) {
             System.out.println(t.getMessage());
             return ResponseEntity.badRequest().build();
@@ -115,8 +126,7 @@ public class ScheduleController {
     @GetMapping("/customer/{customerId}")
     public ResponseEntity<List<ScheduleDTO>> getScheduleForCustomer(@PathVariable long customerId) {
         try {
-            return ResponseEntity.ok(mapper.map(scheduleService.getScheduleByCustomersId(customerId), new TypeToken<List<ScheduleDTO>>() {
-            }.getType()));
+            return ResponseEntity.ok(scheduleListToDTOList(scheduleService.getScheduleByCustomersId(customerId)));
         } catch (Throwable t) {
             System.out.println(t.getMessage());
             return ResponseEntity.badRequest().build();
