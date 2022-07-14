@@ -8,7 +8,10 @@ import com.udacity.jdnd.course3.critter.controller.employee.EmployeeSkill;
 import com.udacity.jdnd.course3.critter.controller.pet.PetController;
 import com.udacity.jdnd.course3.critter.controller.pet.PetDTO;
 import com.udacity.jdnd.course3.critter.controller.schedule.ScheduleController;
-import com.udacity.jdnd.course3.critter.controller.user.*;
+//import com.udacity.jdnd.course3.critter.controller.user.*;
+import com.udacity.jdnd.course3.critter.controller.schedule.ScheduleDTO;
+import com.udacity.jdnd.course3.critter.controller.customer.*;
+import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -288,6 +291,7 @@ public class CritterFunctionalTest {
 //        scheduleDTO.setEmployeeIds(employeeIds);
 ////        scheduleDTO.setDate(date);
 //        scheduleDTO.setActivities(activities);
+//        scheduleDTO.setActivityIds(activities);
 //        return scheduleDTO;
 //    }
 
@@ -312,6 +316,7 @@ public class CritterFunctionalTest {
 //    private static void compareSchedules(ScheduleDTO sched1, ScheduleDTO sched2) {
 //        Assertions.assertEquals(sched1.getPetIds(), sched2.getPetIds());
 //        Assertions.assertEquals(sched1.getActivities(), sched2.getActivities());
+//        Assertions.assertEquals(sched1.getActivityIds(), sched2.getActivityIds());
 //        Assertions.assertEquals(sched1.getEmployeeIds(), sched2.getEmployeeIds());
 //        Assertions.assertEquals(sched1.getDate(), sched2.getDate());
 //    }

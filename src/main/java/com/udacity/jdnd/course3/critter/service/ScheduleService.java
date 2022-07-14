@@ -35,6 +35,10 @@ public class ScheduleService {
         return scheduleRepository.findAllByEmployeesId(id).orElseThrow((Supplier<Throwable>) IndexOutOfBoundsException::new);
     }
 
+    public List<Schedule> getScheduleForPet(Long id) throws Throwable {
+        return scheduleRepository.findAllByPetsId(id).orElseThrow((Supplier<Throwable>) IndexOutOfBoundsException::new);
+    }
+
     public List<Schedule> getScheduleByPetsId(Long id) throws Throwable {
         return scheduleRepository.findAllByPetsId(id).orElseThrow((Supplier<Throwable>) IndexOutOfBoundsException::new);
     }

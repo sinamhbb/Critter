@@ -1,7 +1,5 @@
 package com.udacity.jdnd.course3.critter.controller.schedule;
 
-
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,5 +62,13 @@ public class ScheduleDTO {
 
     public void setCustomersIds(List<Long> customersIds) {
         this.customersIds = customersIds;
+    }
+
+    public List<Long> getActivityIds() {
+        return activityIds;
+    }
+
+    public void setActivityIds(List<Long> activityIds) {
+        this.activityIds = activityIds;
     }
 }
