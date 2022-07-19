@@ -278,12 +278,12 @@ public class CritterFunctionalTest {
         return petDTO;
     }
 
-    private static EmployeeRequestDTO createEmployeeRequestDTO() {
-        EmployeeRequestDTO employeeRequestDTO = new EmployeeRequestDTO();
-        employeeRequestDTO.setDate(LocalDate.of(2019, 12, 25));
-        employeeRequestDTO.setSkills(Sets.newHashSet(EmployeeSkill.FEEDING, EmployeeSkill.WALKING));
-        return employeeRequestDTO;
-    }
+//    private static EmployeeRequestDTO createEmployeeRequestDTO() {
+//        EmployeeRequestDTO employeeRequestDTO = new EmployeeRequestDTO();
+//        employeeRequestDTO.setDate(LocalDate.of(2019, 12, 25));
+//        employeeRequestDTO.setSkills(Sets.newHashSet(EmployeeSkill.FEEDING, EmployeeSkill.WALKING));
+//        return employeeRequestDTO;
+//    }
 
 //    private static ScheduleDTO createScheduleDTO(List<Long> petIds, List<Long> employeeIds, LocalDate date, Set<EmployeeSkill> activities) {
 //        ScheduleDTO scheduleDTO = new ScheduleDTO();

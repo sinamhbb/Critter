@@ -25,7 +25,7 @@ public class Pet {
     @GeneratedValue
     private Long id;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne
     private PetType type;
 
     @Column(length = 100)

@@ -2,11 +2,16 @@ package com.udacity.jdnd.course3.critter.domain.skill;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.udacity.jdnd.course3.critter.controller.employee.EmployeeDTO;
+import com.udacity.jdnd.course3.critter.controller.skill.EmployeeSkillDTO;
 import com.udacity.jdnd.course3.critter.domain.user.employee.Employee;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.modelmapper.Converter;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -27,7 +32,6 @@ public class EmployeeSkill {
 
 
     @OneToOne(fetch = FetchType.EAGER)
-//    @JsonIgnoreProperties(value = {"applications", "hibernateLazyInitializer"})
     private Skill skill;
 
     @Min(1)
