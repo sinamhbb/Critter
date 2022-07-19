@@ -16,7 +16,7 @@ public class SkillController {
 
 
     @GetMapping
-    public ResponseEntity<?> getSkill(@RequestParam String name) {
+    public ResponseEntity<Skill> getSkill(@RequestParam String name) {
         try {
             return ResponseEntity.ok(skillService.getSkill(name));
         } catch (Throwable t) {
@@ -25,7 +25,7 @@ public class SkillController {
     }
 
     @PostMapping
-    public ResponseEntity<?> saveSkill(@RequestBody Skill skill) {
+    public ResponseEntity<Skill> saveSkill(@RequestBody Skill skill) {
         try {
             return ResponseEntity.ok(skillService.saveSkill(skill));
         } catch (Throwable t) {
@@ -35,7 +35,7 @@ public class SkillController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deleteSkill(@RequestParam Long id) {
+    public ResponseEntity<Long> deleteSkill(@RequestParam Long id) {
         try {
             return ResponseEntity.ok(skillService.deleteSkill(id));
         } catch (Throwable t) {
