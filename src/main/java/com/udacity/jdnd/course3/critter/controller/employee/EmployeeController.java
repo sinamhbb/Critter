@@ -1,11 +1,15 @@
 package com.udacity.jdnd.course3.critter.controller.employee;
 
 
+import com.udacity.jdnd.course3.critter.controller.schedule.ScheduleDTO;
 import com.udacity.jdnd.course3.critter.controller.skill.EmployeeSkillDTO;
 import com.udacity.jdnd.course3.critter.domain.skill.EmployeeSkill;
 import com.udacity.jdnd.course3.critter.domain.user.employee.Employee;
 import com.udacity.jdnd.course3.critter.service.EmployeeService;
 import com.udacity.jdnd.course3.critter.utility.DTOUtils;
+import org.modelmapper.Converter;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +17,41 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
+
+    private final static ModelMapper mapper = new ModelMapper();
+    static {
+    }
+
+    private Employee DTOToEmployee(EmployeeDTO employeeDTO) {
+        return mapper.map(employeeDTO, Employee.class);
+    }
+
+    private EmployeeDTO employeeToDTO(Employee employee) {
+        return mapper.map(employee, EmployeeDTO.class);
+    }
+
+    private EmployeeSkill DTOToEmployeeSkill(EmployeeSkillDTO employeeSkillDTO) {
+        return mapper.map(employeeSkillDTO, EmployeeSkill.class);
+    }
+
+    private EmployeeSkillDTO employeeSkillToDTO(EmployeeSkill employeeSkill) {
+        return mapper.map(employeeSkill, EmployeeSkillDTO.class);
+    }
+
+    private Set<EmployeeSkill> DTOListToEmployeeSkillList(Set<EmployeeSkillDTO> employeeSkillDTOS) {
+        return mapper.map(employeeSkillDTOS, new TypeToken<Set<EmployeeSkill>>() {
+        }.getType());
+    }
+
+    private Set<EmployeeSkillDTO> employeeSkillListToDTOList(Set<EmployeeSkill> employeeSkills) {
+        return mapper.map(employeeSkills, new TypeToken<Set<EmployeeSkillDTO>>() {
+        }.getType());
+    }
 
     @Autowired
     private EmployeeService employeeService;
@@ -24,8 +59,10 @@ public class EmployeeController {
     @GetMapping
     public ResponseEntity<EmployeeDTO> getEmployee(@RequestParam long id) {
         try {
-            return ResponseEntity.ok(DTOUtils.convertEmployeeToEmployeeDTO(employeeService.getEmployee(id)));
+            Employee employee = employeeService.getEmployee(id);
+            return ResponseEntity.ok(employeeToDTO(employee));
         } catch (Throwable t) {
+            System.out.println(t.getMessage());
             return ResponseEntity.badRequest().build();
         }
     }
@@ -33,22 +70,21 @@ public class EmployeeController {
     @PostMapping
     public ResponseEntity<EmployeeDTO> saveEmployee(@RequestBody EmployeeDTO employeeDTO) {
         try {
-            Employee employee = employeeService.saveEmployee(DTOUtils.convertEmployeeDTOToEmployee(employeeDTO));
-            employeeDTO.setId(employee.getId());
-            return ResponseEntity.ok(employeeDTO);
+            Employee employee = employeeService.saveEmployee(DTOToEmployee(employeeDTO));
+            return ResponseEntity.ok(employeeToDTO(employee));
         } catch (Throwable t) {
-            System.out.println(t);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            System.out.println(t.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(employeeDTO);
         }
     }
 
     @PutMapping
     public ResponseEntity<Set<EmployeeSkillDTO>> saveEmployeeSkills(@RequestBody Set<EmployeeSkillDTO> employeeSkillDTOs) {
         try {
-            Set<EmployeeSkill> employeeSkill = employeeService.saveEmployeeSkills(DTOUtils.listConvertEmployeeSkillDTOToEmployeeSkill(employeeSkillDTOs));
-            return ResponseEntity.ok(DTOUtils.listConvertEmployeeSkillToEmployeeSkillDTO(employeeService.saveEmployeeSkills(DTOUtils.listConvertEmployeeSkillDTOToEmployeeSkill(employeeSkillDTOs))));
+            Set<EmployeeSkill> employeeSkills = employeeService.saveEmployeeSkills(DTOListToEmployeeSkillList(employeeSkillDTOs));
+            return ResponseEntity.ok(employeeSkillListToDTOList(employeeService.saveEmployeeSkills(DTOListToEmployeeSkillList(employeeSkillDTOs))));
         } catch (Throwable t) {
-            System.out.println(t);
+            System.out.println(t.getMessage());
             return ResponseEntity.badRequest().body(employeeSkillDTOs);
         }
     }
