@@ -3,6 +3,7 @@ package com.udacity.jdnd.course3.critter.controller.employee;
 
 import com.udacity.jdnd.course3.critter.controller.skill.EmployeeSkillDTO;
 import com.udacity.jdnd.course3.critter.domain.skill.EmployeeSkill;
+import com.udacity.jdnd.course3.critter.domain.skill.Skill;
 import com.udacity.jdnd.course3.critter.domain.user.employee.Employee;
 import com.udacity.jdnd.course3.critter.service.EmployeeService;
 import org.modelmapper.ModelMapper;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/employee")
@@ -109,7 +111,7 @@ public class EmployeeController {
     @GetMapping("/availability")
     public ResponseEntity<Set<EmployeeDTO>> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeRequestDTO) {
         try {
-            Set<Employee> employees = employeeService.getEmployeeBySkillName(employeeRequestDTO);
+            Set<Employee> employees = employeeService.getEmployeeBySkillName(employeeRequestDTO.getSkills().stream().map(Skill::getId).collect(Collectors.toSet()));
             Set<EmployeeDTO> employeeDTOS = employeeSetToDTOSet(employees);
             return ResponseEntity.ok(employeeDTOS);
         } catch (Throwable t) {
