@@ -73,9 +73,9 @@ public class EmployeeService {
         return id;
     }
 
-    public Set<Employee> getEmployeeBySkillName(EmployeeRequestDTO employeeRequestDTO) {
+    public Set<Employee> getEmployeeBySkillName(Set<Long> employeeSkillIds) {
         Set<Employee> employees = new HashSet<>();
-        employeeRequestDTO.getSkills().stream().map(Skill::getId).forEach(id -> {
+        employeeSkillIds.forEach(id -> {
             Set<Employee> employees1 = new HashSet<>(employeeSkillRepository.findBySkillId(id));
             employees.addAll(employees1);
         });
