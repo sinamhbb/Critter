@@ -1,13 +1,10 @@
 package com.udacity.jdnd.course3.critter.controller.employee;
 
 
-import com.udacity.jdnd.course3.critter.controller.schedule.ScheduleDTO;
 import com.udacity.jdnd.course3.critter.controller.skill.EmployeeSkillDTO;
 import com.udacity.jdnd.course3.critter.domain.skill.EmployeeSkill;
 import com.udacity.jdnd.course3.critter.domain.user.employee.Employee;
 import com.udacity.jdnd.course3.critter.service.EmployeeService;
-import com.udacity.jdnd.course3.critter.utility.DTOUtils;
-import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +12,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
 
     private final static ModelMapper mapper = new ModelMapper();
-    static {
-    }
 
     private Employee DTOToEmployee(EmployeeDTO employeeDTO) {
         return mapper.map(employeeDTO, Employee.class);
@@ -33,6 +26,11 @@ public class EmployeeController {
 
     private EmployeeDTO employeeToDTO(Employee employee) {
         return mapper.map(employee, EmployeeDTO.class);
+    }
+
+    private Set<EmployeeDTO> employeeSetToDTOSet(Set<Employee> employees) {
+        return mapper.map(employees, new TypeToken<Set<EmployeeDTO>>() {
+        }.getType());
     }
 
     private EmployeeSkill DTOToEmployeeSkill(EmployeeSkillDTO employeeSkillDTO) {
@@ -109,7 +107,14 @@ public class EmployeeController {
     }
 
     @GetMapping("/availability")
-    public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
-        throw new UnsupportedOperationException();
+    public ResponseEntity<Set<EmployeeDTO>> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeRequestDTO) {
+        try {
+            Set<Employee> employees = employeeService.getEmployeeBySkillName(employeeRequestDTO);
+            Set<EmployeeDTO> employeeDTOS = employeeSetToDTOSet(employees);
+            return ResponseEntity.ok(employeeDTOS);
+        } catch (Throwable t) {
+            System.out.println(t);
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

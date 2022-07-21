@@ -1,6 +1,6 @@
 package com.udacity.jdnd.course3.critter.controller.employee;
 
-import com.udacity.jdnd.course3.critter.controller.skill.EmployeeSkillDTO;
+import com.udacity.jdnd.course3.critter.domain.skill.Skill;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,8 +20,6 @@ import java.util.Set;
 @Getter
 @Setter
 public class EmployeeRequestDTO {
-    private Set<EmployeeSkillDTO> skills;
+    private Set<Skill> skills;
     private LocalDate date;
-    private LocalTime startTime;
-    private LocalTime endTime;
 }

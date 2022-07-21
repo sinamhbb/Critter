@@ -2,6 +2,7 @@ package com.udacity.jdnd.course3.critter.domain.user.employee;
 
 
 import com.udacity.jdnd.course3.critter.controller.employee.EmployeeDTO;
+import com.udacity.jdnd.course3.critter.domain.schedule.Schedule;
 import com.udacity.jdnd.course3.critter.domain.skill.EmployeeSkill;
 import com.udacity.jdnd.course3.critter.domain.user.User;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,9 @@ public class Employee extends User {
 
     @ElementCollection(fetch = FetchType.LAZY)
     private Set<DayOfWeek> daysAvailable;
+
+    @ManyToMany(mappedBy = "employees")
+    private Set<Schedule> schedules;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<EmployeeSkill> skillLevels;

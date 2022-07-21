@@ -40,7 +40,7 @@ public class ScheduleController {
         DTOToScheduleTypeMap.addMappings(
                 mapper -> {
                     mapper.using(listOfLongToListOfEmployees).map(ScheduleDTO::getEmployeeIds, Schedule::setEmployees);
-                    mapper.using(listOfLongToListOfEmployeeSkills).map(ScheduleDTO::getActivities, Schedule::setActivities);
+                    mapper.using(listOfLongToListOfEmployeeSkills).map(ScheduleDTO::getActivityIds, Schedule::setActivities);
                     mapper.using(listOfLongToListOfPets).map(ScheduleDTO::getPetIds, Schedule::setPets);
                     mapper.using(listOfLongToListOfCustomers).map(ScheduleDTO::getCustomersIds, Schedule::setCustomers);
                 });
@@ -55,7 +55,7 @@ public class ScheduleController {
         scheduleToDTOTypeMap.addMappings(
                 mapper -> {
                     mapper.using(listOfEmployeesToListOfLong).map(Schedule::getEmployees, ScheduleDTO::setEmployeeIds);
-                    mapper.using(listOfEmployeeSkillsToListOfLong).map(Schedule::getActivities, ScheduleDTO::setActivities);
+                    mapper.using(listOfEmployeeSkillsToListOfLong).map(Schedule::getActivities, ScheduleDTO::setActivityIds);
                     mapper.using(listOfPetToListOfLong).map(Schedule::getPets, ScheduleDTO::setPetIds);
                     mapper.using(listOfCustomerToListOfLong).map(Schedule::getCustomers, ScheduleDTO::setCustomersIds);
                 });
@@ -83,6 +83,7 @@ public class ScheduleController {
     @PostMapping
     public ResponseEntity<ScheduleDTO> createSchedule(@RequestBody ScheduleDTO scheduleDTO) {
         try {
+            System.out.println("end time: " + scheduleDTO.getEndTime());
             Schedule schedule = scheduleService.createSchedule(DTOToSchedule(scheduleDTO));
             scheduleDTO.setId(schedule.getId());
             return ResponseEntity.ok(scheduleDTO);

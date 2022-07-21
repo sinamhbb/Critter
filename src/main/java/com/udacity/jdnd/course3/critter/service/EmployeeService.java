@@ -1,8 +1,12 @@
 package com.udacity.jdnd.course3.critter.service;
 
 
+import com.udacity.jdnd.course3.critter.controller.employee.EmployeeRequestDTO;
+import com.udacity.jdnd.course3.critter.domain.schedule.Schedule;
+import com.udacity.jdnd.course3.critter.domain.schedule.ScheduleRepository;
 import com.udacity.jdnd.course3.critter.domain.skill.EmployeeSkill;
 import com.udacity.jdnd.course3.critter.domain.skill.EmployeeSkillRepository;
+import com.udacity.jdnd.course3.critter.domain.skill.Skill;
 import com.udacity.jdnd.course3.critter.domain.user.employee.Employee;
 import com.udacity.jdnd.course3.critter.domain.user.employee.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +25,9 @@ public class EmployeeService {
 
     @Autowired
     private EmployeeSkillRepository employeeSkillRepository;
+
+    @Autowired
+    private ScheduleRepository scheduleRepository;
 
     public Employee getEmployee(Long id) throws Throwable {
         Optional<Employee> employee = employeeRepository.findById(id);
@@ -65,4 +72,14 @@ public class EmployeeService {
         });
         return id;
     }
+
+    public Set<Employee> getEmployeeBySkillName(EmployeeRequestDTO employeeRequestDTO) {
+        Set<Employee> employees = new HashSet<>();
+        employeeRequestDTO.getSkills().stream().map(Skill::getId).forEach(id -> {
+            Set<Employee> employees1 = new HashSet<>(employeeSkillRepository.findBySkillId(id));
+            employees.addAll(employees1);
+        });
+        return employees;
+    }
+
 }
