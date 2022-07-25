@@ -20,7 +20,9 @@ public class ScheduleService {
 
     public Schedule createSchedule(Schedule schedule) {
         if (schedule.getDate().isAfter(LocalDate.now())) {
-            System.out.println("Customer id: " + schedule.getCustomers().get(0).getId());
+            if (schedule.getPets().stream().anyMatch(pet -> pet.getCustomers().isEmpty())) {
+                throw new IllegalArgumentException("This Pet Doesn't Have an Owner");
+            }
             return scheduleRepository.save(schedule);
         } else {
             throw new IllegalArgumentException("Schedule Date is not valid");

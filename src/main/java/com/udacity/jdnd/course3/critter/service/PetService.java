@@ -20,7 +20,7 @@ public class PetService {
         if (pet.getId() != 0L ) {
             petRepository.findById(pet.getId()).orElseThrow((Supplier<Throwable>) IndexOutOfBoundsException::new);
         }
-        pet.getCustomers().forEach(customer -> customer.setPets(List.of(pet)));
+        pet.getCustomers().forEach(customer -> customer.addPet(pet));
         return petRepository.save(pet);
     }
 

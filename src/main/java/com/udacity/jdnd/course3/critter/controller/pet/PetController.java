@@ -59,7 +59,7 @@ public class PetController {
     }
 
     @PostMapping
-    public ResponseEntity<PetDTO> savePet(@RequestBody PetDTO petDTO) throws Throwable {
+    public ResponseEntity<PetDTO> savePet(@RequestBody PetDTO petDTO) {
         try {
             Pet pet = DTOToPet(petDTO);
             pet = petService.savePet(pet);
@@ -71,7 +71,7 @@ public class PetController {
     }
 
     @GetMapping("/{petId}")
-    public ResponseEntity<PetDTO> getPet(@PathVariable Long petId) throws Throwable {
+    public ResponseEntity<PetDTO> getPet(@PathVariable Long petId) {
         try {
             Pet pet = petService.getPet(petId);
             return ResponseEntity.ok(petToDTO(pet));

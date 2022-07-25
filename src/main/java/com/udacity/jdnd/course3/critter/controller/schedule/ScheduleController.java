@@ -83,13 +83,12 @@ public class ScheduleController {
     @PostMapping
     public ResponseEntity<ScheduleDTO> createSchedule(@RequestBody ScheduleDTO scheduleDTO) {
         try {
-            System.out.println("end time: " + scheduleDTO.getEndTime());
             Schedule schedule = scheduleService.createSchedule(DTOToSchedule(scheduleDTO));
             scheduleDTO.setId(schedule.getId());
             return ResponseEntity.ok(scheduleDTO);
         } catch (Throwable t) {
             System.out.println(t.getMessage());
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().header("Error",t.getMessage()).build();
         }
     }
 
