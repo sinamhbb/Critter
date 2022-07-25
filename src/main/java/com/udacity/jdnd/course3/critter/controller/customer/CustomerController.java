@@ -33,15 +33,11 @@ public class CustomerController {
     static {
         Converter<List<Long>, List<Pet>> listOfLongToListOfPets = ctx -> ctx.getSource().stream().map(Pet::new).collect(Collectors.toList());
         TypeMap<CustomerDTO, Customer> DTOToCustomerTypeMap = mapper.createTypeMap(CustomerDTO.class, Customer.class);
-        DTOToCustomerTypeMap.addMappings(mapper -> {
-            mapper.using(listOfLongToListOfPets).map(CustomerDTO::getPetIds, Customer::setPets);
-        });
+        DTOToCustomerTypeMap.addMappings(mapper -> mapper.using(listOfLongToListOfPets).map(CustomerDTO::getPetIds, Customer::setPets));
 
         Converter<List<Pet>, List<Long>> listOfPetToListOfLong = ctx -> ctx.getSource().stream().map(Pet::getId).collect(Collectors.toList());
         TypeMap<Customer, CustomerDTO> customerToDTOTypeMap = mapper.createTypeMap(Customer.class, CustomerDTO.class);
-        customerToDTOTypeMap.addMappings(mapper -> {
-            mapper.using(listOfPetToListOfLong).map(Customer::getPets, CustomerDTO::setPetIds);
-        });
+        customerToDTOTypeMap.addMappings(mapper -> mapper.using(listOfPetToListOfLong).map(Customer::getPets, CustomerDTO::setPetIds));
     }
 
     private Customer DTOToCustomer(CustomerDTO customerDTO) {
@@ -76,7 +72,8 @@ public class CustomerController {
     public ResponseEntity<CustomerDTO> getCustomer(@PathVariable Long customerId){
         try {
             Customer customer = customerService.getCustomer(customerId);
-            return ResponseEntity.ok(customerToDTO(customer));
+            CustomerDTO customerDTO = customerToDTO(customer);
+            return ResponseEntity.ok(customerDTO);
         } catch (Throwable t) {
             return ResponseEntity.badRequest().build();
         }

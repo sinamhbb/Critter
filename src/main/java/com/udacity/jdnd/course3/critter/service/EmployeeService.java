@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -76,7 +77,7 @@ public class EmployeeService {
     public Set<Employee> getEmployeeBySkillName(Set<Long> employeeSkillIds) {
         Set<Employee> employees = new HashSet<>();
         employeeSkillIds.forEach(id -> {
-            Set<Employee> employees1 = new HashSet<>(employeeSkillRepository.findBySkillId(id));
+            Set<Employee> employees1 = new HashSet<>(employeeSkillRepository.findBySkillId(id)).stream().map(EmployeeSkill::getEmployee).collect(Collectors.toSet());
             employees.addAll(employees1);
         });
         return employees;

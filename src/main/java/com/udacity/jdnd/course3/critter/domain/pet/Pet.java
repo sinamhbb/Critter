@@ -32,7 +32,7 @@ public class Pet {
     @Nationalized
     private String name;
 
-    @ManyToMany(cascade = CascadeType.REMOVE,fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Customer> customers = new ArrayList<>();
 
     private LocalDate birthDate;
