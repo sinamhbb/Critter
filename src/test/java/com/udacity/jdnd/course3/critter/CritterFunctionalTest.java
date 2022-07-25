@@ -32,6 +32,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * This is a set of functional tests to validate the basic capabilities desired for this application.
@@ -174,7 +175,7 @@ public class CritterFunctionalTest {
 //    @Test
 //    public void testChangeEmployeeAvailability() {
 //        EmployeeDTO employeeDTO = createEmployeeDTO();
-//        EmployeeDTO emp1 = userController.saveEmployee(employeeDTO);
+//        EmployeeDTO emp1 = employeeController.saveEmployee(employeeDTO).getBody();
 //        Assertions.assertNull(emp1.getDaysAvailable());
 //
 //        Set<DayOfWeek> availability = Sets.newHashSet(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY);
