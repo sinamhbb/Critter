@@ -12,7 +12,9 @@ import com.udacity.jdnd.course3.critter.domain.user.employee.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
+import java.time.DayOfWeek;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -72,6 +74,12 @@ public class EmployeeService {
             employeeRepository.deleteById(id);
         });
         return id;
+    }
+
+    public Employee setAvailabilityFoEmployee(Set<DayOfWeek> daysAvailable, @PathVariable long employeeId) throws Throwable {
+            Employee employee = employeeRepository.findById(employeeId).orElseThrow(NoSuchElementException::new);
+            employee.setDaysAvailable(daysAvailable);
+            return employee;
     }
 
     public Set<Employee> getEmployeeBySkillName(Set<Long> employeeSkillIds) {

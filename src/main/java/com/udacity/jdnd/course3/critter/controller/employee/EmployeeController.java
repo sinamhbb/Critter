@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.DayOfWeek;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -108,10 +109,22 @@ public class EmployeeController {
         }
     }
 
+    @PutMapping("/availability/{employeeId}")
+    public ResponseEntity<EmployeeDTO> setAvailability(@RequestBody Set<DayOfWeek> daysAvailable, @PathVariable long employeeId) {
+        try {
+            Employee employee = employeeService.setAvailabilityFoEmployee(daysAvailable,employeeId);
+            return ResponseEntity.ok(employeeToDTO(employee));
+        } catch (Throwable e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     @GetMapping("/availability")
     public ResponseEntity<Set<EmployeeDTO>> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeRequestDTO) {
         try {
             Set<Employee> employees = employeeService.getEmployeeBySkillName(employeeRequestDTO.getSkills().stream().map(Skill::getId).collect(Collectors.toSet()));
+            employees.removeIf(employee -> !employee.getDaysAvailable().contains(employeeRequestDTO.getDate().getDayOfWeek()));
             Set<EmployeeDTO> employeeDTOS = employeeSetToDTOSet(employees);
             return ResponseEntity.ok(employeeDTOS);
         } catch (Throwable t) {
