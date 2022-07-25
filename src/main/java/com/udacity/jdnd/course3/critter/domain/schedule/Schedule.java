@@ -14,7 +14,9 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -32,16 +34,16 @@ public class Schedule {
     private LocalTime endTime;
 
     @ManyToMany
-    private List<Employee> employees = new ArrayList<>();
+    private Set<Employee> employees = new HashSet<>();
 
     @ManyToMany
-    private List<Pet> pets = new ArrayList<>();
+    private Set<Pet> pets = new HashSet<>();
 
     @ManyToMany
-    private List<EmployeeSkill> activities = new ArrayList<>();
+    private Set<EmployeeSkill> activities = new HashSet<>();
 
     @ManyToMany
-    private List<Customer> customers = new ArrayList<>();
+    private Set<Customer> customers = new HashSet<>();
 
     public void addEmployee(Employee employee) {
         this.employees.add(employee);
