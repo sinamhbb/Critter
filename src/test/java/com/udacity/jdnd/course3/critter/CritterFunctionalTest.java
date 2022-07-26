@@ -231,7 +231,7 @@ public class CritterFunctionalTest {
         Set<Long> eIds2expected = Sets.newHashSet(emp3n.getId());
         Assertions.assertEquals(eIds2, eIds2expected);
     }
-//
+
     @Test
     public void testSchedulePetsForServiceWithEmployee() {
 
@@ -342,15 +342,16 @@ public class CritterFunctionalTest {
     private static EmployeeRequestDTO createEmployeeRequestDTO() {
         EmployeeRequestDTO employeeRequestDTO = new EmployeeRequestDTO();
         employeeRequestDTO.setDate(LocalDate.of(2019, 12, 25));
+        employeeRequestDTO.setSkills(Sets.newHashSet(new Skill(null, "FEEDING"), new Skill(null, "WALKING")));
         return employeeRequestDTO;
     }
 
-    private static ScheduleDTO createScheduleDTO(Set<Long> petIds, Set<Long> employeeIds, LocalDate date, Set<Long> activities) {
+    private static ScheduleDTO createScheduleDTO(Set<Long> petIds, Set<Long> employeeIds, LocalDate date, Set<Long> activityIds) {
         ScheduleDTO scheduleDTO = new ScheduleDTO();
         scheduleDTO.setPetIds(petIds);
         scheduleDTO.setEmployeeIds(employeeIds);
-//        scheduleDTO.setDate(date);
-        scheduleDTO.setActivityIds(activities);
+        scheduleDTO.setDate(date);
+        scheduleDTO.setActivityIds(activityIds);
         return scheduleDTO;
     }
 
@@ -369,7 +370,7 @@ public class CritterFunctionalTest {
                     p.setOwnerIds(List.of(customerDTO.getId()));
                     return petController.savePet(p).getBody().getId();
                 }).collect(Collectors.toSet());
-        return scheduleController.createSchedule(createScheduleDTO(petIds, employeeIds, date, activities.stream().map(EmployeeSkillDTO::getId).collect(Collectors.toSet()))).getBody();
+        return scheduleController.createSchedule(createScheduleDTO(petIds, employeeIds, date, activities.stream().map(act -> act.getId()).collect(Collectors.toSet()))).getBody();
     }
 
     private static void compareSchedules(ScheduleDTO scheduleDTO1, ScheduleDTO scheduleDTO2) {
@@ -379,5 +380,4 @@ public class CritterFunctionalTest {
         Assertions.assertEquals(scheduleDTO1.getEmployeeIds(), scheduleDTO2.getEmployeeIds());
         Assertions.assertEquals(scheduleDTO1.getDate(), scheduleDTO2.getDate());
     }
-
 }
