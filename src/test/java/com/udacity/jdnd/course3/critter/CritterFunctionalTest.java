@@ -4,7 +4,7 @@ import com.google.common.collect.Sets;
 import com.udacity.jdnd.course3.critter.controller.employee.EmployeeController;
 import com.udacity.jdnd.course3.critter.controller.employee.EmployeeDTO;
 import com.udacity.jdnd.course3.critter.controller.employee.EmployeeRequestDTO;
-import com.udacity.jdnd.course3.critter.controller.employee.EmployeeSkill;
+//import com.udacity.jdnd.course3.critter.controller.employee.EmployeeSkill;
 import com.udacity.jdnd.course3.critter.controller.pet.PetController;
 import com.udacity.jdnd.course3.critter.controller.pet.PetDTO;
 import com.udacity.jdnd.course3.critter.controller.pet.PetTypeController;
@@ -12,9 +12,12 @@ import com.udacity.jdnd.course3.critter.controller.schedule.ScheduleController;
 //import com.udacity.jdnd.course3.critter.controller.user.*;
 import com.udacity.jdnd.course3.critter.controller.schedule.ScheduleDTO;
 import com.udacity.jdnd.course3.critter.controller.customer.*;
+import com.udacity.jdnd.course3.critter.controller.skill.EmployeeSkillDTO;
 import com.udacity.jdnd.course3.critter.controller.skill.SkillController;
 import com.udacity.jdnd.course3.critter.domain.pet.PetType;
+import com.udacity.jdnd.course3.critter.domain.skill.EmployeeSkill;
 import com.udacity.jdnd.course3.critter.domain.skill.Skill;
+import org.assertj.core.util.Lists;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
@@ -33,6 +36,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * This is a set of functional tests to validate the basic capabilities desired for this application.
@@ -172,79 +177,86 @@ public class CritterFunctionalTest {
         Assertions.assertEquals(owner.getPetIds().get(0), newPet.getId());
     }
 
-//    @Test
-//    public void testChangeEmployeeAvailability() {
-//        EmployeeDTO employeeDTO = createEmployeeDTO();
-//        EmployeeDTO emp1 = employeeController.saveEmployee(employeeDTO).getBody();
-//        Assertions.assertNull(emp1.getDaysAvailable());
-//
-//        Set<DayOfWeek> availability = Sets.newHashSet(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY);
-//        userController.setAvailability(availability, emp1.getId());
-//
-//        EmployeeDTO emp2 = userController.getEmployee(emp1.getId());
-//        Assertions.assertEquals(availability, emp2.getDaysAvailable());
-//    }
+    @Test
+    public void testChangeEmployeeAvailability() {
+        EmployeeDTO employeeDTO = createEmployeeDTO();
+        EmployeeDTO emp1 = employeeController.saveEmployee(employeeDTO).getBody();
+        Assertions.assertNull(emp1.getDaysAvailable());
 
-//    @Test
-//    public void testFindEmployeesByServiceAndTime() {
-//        EmployeeDTO emp1 = createEmployeeDTO();
-//        EmployeeDTO emp2 = createEmployeeDTO();
-//        EmployeeDTO emp3 = createEmployeeDTO();
-//
-//        emp1.setDaysAvailable(Sets.newHashSet(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY));
-//        emp2.setDaysAvailable(Sets.newHashSet(DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY));
-//        emp3.setDaysAvailable(Sets.newHashSet(DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY));
-//
-//        emp1.setSkills(Sets.newHashSet(EmployeeSkill.FEEDING, EmployeeSkill.PETTING));
-//        emp2.setSkills(Sets.newHashSet(EmployeeSkill.PETTING, EmployeeSkill.WALKING));
-//        emp3.setSkills(Sets.newHashSet(EmployeeSkill.WALKING, EmployeeSkill.SHAVING));
-//
-//        EmployeeDTO emp1n = userController.saveEmployee(emp1);
-//        EmployeeDTO emp2n = userController.saveEmployee(emp2);
-//        EmployeeDTO emp3n = userController.saveEmployee(emp3);
-//
-//        //make a request that matches employee 1 or 2
-//        EmployeeRequestDTO er1 = new EmployeeRequestDTO();
-//        er1.setDate(LocalDate.of(2019, 12, 25)); //wednesday
-//        er1.setSkills(Sets.newHashSet(EmployeeSkill.PETTING));
-//
-//        Set<Long> eIds1 = userController.findEmployeesForService(er1).stream().map(EmployeeDTO::getId).collect(Collectors.toSet());
-//        Set<Long> eIds1expected = Sets.newHashSet(emp1n.getId(), emp2n.getId());
-//        Assertions.assertEquals(eIds1, eIds1expected);
-//
-//        //make a request that matches only employee 3
-//        EmployeeRequestDTO er2 = new EmployeeRequestDTO();
-//        er2.setDate(LocalDate.of(2019, 12, 27)); //friday
-//        er2.setSkills(Sets.newHashSet(EmployeeSkill.WALKING, EmployeeSkill.SHAVING));
-//
-//        Set<Long> eIds2 = userController.findEmployeesForService(er2).stream().map(EmployeeDTO::getId).collect(Collectors.toSet());
-//        Set<Long> eIds2expected = Sets.newHashSet(emp3n.getId());
-//        Assertions.assertEquals(eIds2, eIds2expected);
-//    }
+        Set<DayOfWeek> availability = Sets.newHashSet(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY);
+        employeeController.setAvailability(availability, emp1.getId());
 
-//    @Test
-//    public void testSchedulePetsForServiceWithEmployee() {
-//        EmployeeDTO employeeTemp = createEmployeeDTO();
-//        employeeTemp.setDaysAvailable(Sets.newHashSet(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY));
-//        EmployeeDTO employeeDTO = userController.saveEmployee(employeeTemp);
-//        CustomerDTO customerDTO = userController.saveCustomer(createCustomerDTO());
-//        PetDTO petTemp = createPetDTO();
-//        petTemp.setOwnerId(customerDTO.getId());
-//        PetDTO petDTO = petController.savePet(petTemp);
-//
-//        LocalDate date = LocalDate.of(2019, 12, 25);
-//        List<Long> petList = Lists.newArrayList(petDTO.getId());
-//        List<Long> employeeList = Lists.newArrayList(employeeDTO.getId());
-//        Set<EmployeeSkill> skillSet =  Sets.newHashSet(EmployeeSkill.PETTING);
-//
-//        scheduleController.createSchedule(createScheduleDTO(petList, employeeList, date, skillSet));
-//        ScheduleDTO scheduleDTO = scheduleController.getAllSchedules().get(0);
-//
-//        Assertions.assertEquals(scheduleDTO.getActivities(), skillSet);
-//        Assertions.assertEquals(scheduleDTO.getDate(), date);
-//        Assertions.assertEquals(scheduleDTO.getEmployeeIds(), employeeList);
-//        Assertions.assertEquals(scheduleDTO.getPetIds(), petList);
-//    }
+        EmployeeDTO emp2 = employeeController.getEmployee(emp1.getId()).getBody();
+        Assertions.assertEquals(availability, emp2.getDaysAvailable());
+    }
+
+    @Test
+    public void testFindEmployeesByServiceAndTime() {
+        EmployeeDTO emp1 = createEmployeeDTO();
+        EmployeeDTO emp2 = createEmployeeDTO();
+        EmployeeDTO emp3 = createEmployeeDTO();
+
+        Skill feedingSkill = skillController.saveSkill(new Skill(null, "FEEDING")).getBody();
+        Skill pettingSkill = skillController.saveSkill(new Skill(null, "PETTING")).getBody();
+        Skill walkingSkill = skillController.saveSkill(new Skill(null, "WALKING")).getBody();
+        Skill shavingSkill = skillController.saveSkill(new Skill(null, "SHAVING")).getBody();
+
+        emp1.setDaysAvailable(Sets.newHashSet(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY));
+        emp2.setDaysAvailable(Sets.newHashSet(DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY));
+        emp3.setDaysAvailable(Sets.newHashSet(DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY));
+
+        emp1.setSkillLevels(Sets.newHashSet(new EmployeeSkillDTO(null,feedingSkill, 5,null), new EmployeeSkillDTO(null,pettingSkill, 5,null)));
+        emp2.setSkillLevels(Sets.newHashSet(Sets.newHashSet(new EmployeeSkillDTO(null,pettingSkill, 5,null), new EmployeeSkillDTO(null,walkingSkill, 5,null))));
+        emp3.setSkillLevels(Sets.newHashSet(Sets.newHashSet(new EmployeeSkillDTO(null,walkingSkill, 5,null), new EmployeeSkillDTO(null,shavingSkill, 5,null))));
+
+        EmployeeDTO emp1n = employeeController.saveEmployee(emp1).getBody();
+        EmployeeDTO emp2n = employeeController.saveEmployee(emp2).getBody();
+        EmployeeDTO emp3n = employeeController.saveEmployee(emp3).getBody();
+
+        //make a request that matches employee 1 or 2
+        EmployeeRequestDTO er1 = new EmployeeRequestDTO();
+        er1.setDate(LocalDate.of(2019, 12, 25)); //wednesday
+        er1.setSkills(Sets.newHashSet(pettingSkill));
+
+        Set<Long> eIds1 = employeeController.findEmployeesForService(er1).getBody().stream().map(EmployeeDTO::getId).collect(Collectors.toSet());
+        Set<Long> eIds1expected = Sets.newHashSet( emp2n.getId());
+        Assertions.assertEquals(eIds1, eIds1expected);
+
+        //make a request that matches only employee 3
+        EmployeeRequestDTO er2 = new EmployeeRequestDTO();
+        er2.setDate(LocalDate.of(2019, 12, 27)); //friday
+        er2.setSkills(Sets.newHashSet(walkingSkill, shavingSkill));
+
+        Set<Long> eIds2 = employeeController.findEmployeesForService(er2).getBody().stream().map(EmployeeDTO::getId).collect(Collectors.toSet());
+        Set<Long> eIds2expected = Sets.newHashSet(emp3n.getId());
+        Assertions.assertEquals(eIds2, eIds2expected);
+    }
+
+    @Test
+    public void testSchedulePetsForServiceWithEmployee() {
+        EmployeeDTO employeeTemp = createEmployeeDTO();
+        employeeTemp.setDaysAvailable(Sets.newHashSet(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY));
+        EmployeeDTO employeeDTO = employeeController.saveEmployee(employeeTemp).getBody();
+        CustomerDTO customerDTO = customerController.saveCustomer(createCustomerDTO()).getBody();
+        PetDTO petTemp = createPetDTO();
+        petTemp.setOwnerIds(List.of(customerDTO.getId()));
+        PetDTO petDTO = petController.savePet(petTemp).getBody();
+
+        LocalDate date = LocalDate.of(2019, 12, 25);
+        Set<Long> petSet = new HashSet<>();
+        petSet.add(petDTO.getId());
+        Set<Long> employeeList = new HashSet<>();
+        employeeList.add(employeeDTO.getId());
+        Set<EmployeeSkill> skillSet =  Sets.newHashSet(new Skill(null, "PETTING"));
+
+        scheduleController.createSchedule(createScheduleDTO(petList, employeeList, date, skillSet));
+        ScheduleDTO scheduleDTO = scheduleController.getAllSchedules().get(0);
+
+        Assertions.assertEquals(scheduleDTO.getActivities(), skillSet);
+        Assertions.assertEquals(scheduleDTO.getDate(), date);
+        Assertions.assertEquals(scheduleDTO.getEmployeeIds(), employeeList);
+        Assertions.assertEquals(scheduleDTO.getPetIds(), petList);
+    }
 
 //    @Test
 //    public void testFindScheduleByEntities() {
@@ -298,7 +310,6 @@ public class CritterFunctionalTest {
     private static EmployeeDTO createEmployeeDTO() {
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setName("TestEmployee");
-        employeeDTO.setDaysAvailable(new HashSet<DayOfWeek>(DayOfWeek.FRIDAY.getValue(),DayOfWeek.MONDAY.getValue()));
         employeeDTO.setSkillLevels(new HashSet<>());
         return employeeDTO;
     }
@@ -322,47 +333,46 @@ public class CritterFunctionalTest {
         return petDTO;
     }
 
-//    private static EmployeeRequestDTO createEmployeeRequestDTO() {
-//        EmployeeRequestDTO employeeRequestDTO = new EmployeeRequestDTO();
-//        employeeRequestDTO.setDate(LocalDate.of(2019, 12, 25));
-//        employeeRequestDTO.setSkills(Sets.newHashSet(EmployeeSkill.FEEDING, EmployeeSkill.WALKING));
-//        return employeeRequestDTO;
-//    }
+    private static EmployeeRequestDTO createEmployeeRequestDTO() {
+        EmployeeRequestDTO employeeRequestDTO = new EmployeeRequestDTO();
+        employeeRequestDTO.setDate(LocalDate.of(2019, 12, 25));
+        employeeRequestDTO.setSkills(Sets.newHashSet(new Skill(null, "FEEDING"), new Skill(null, "WALKING")));
+        return employeeRequestDTO;
+    }
 
-//    private static ScheduleDTO createScheduleDTO(List<Long> petIds, List<Long> employeeIds, LocalDate date, Set<EmployeeSkill> activities) {
-//        ScheduleDTO scheduleDTO = new ScheduleDTO();
-//        scheduleDTO.setPetIds(petIds);
-//        scheduleDTO.setEmployeeIds(employeeIds);
-////        scheduleDTO.setDate(date);
-//        scheduleDTO.setActivities(activities);
-//        scheduleDTO.setActivityIds(activities);
-//        return scheduleDTO;
-//    }
+    private static ScheduleDTO createScheduleDTO(Set<Long> petIds, Set<Long> employeeIds, LocalDate date, Set<Long> activityIds) {
+        ScheduleDTO scheduleDTO = new ScheduleDTO();
+        scheduleDTO.setPetIds(petIds);
+        scheduleDTO.setEmployeeIds(employeeIds);
+        scheduleDTO.setDate(date);
+        scheduleDTO.setActivityIds(activityIds);
+        return scheduleDTO;
+    }
 
-//    private ScheduleDTO populateSchedule(int numEmployees, int numPets, LocalDate date, Set<EmployeeSkill> activities) {
-//        List<Long> employeeIds = IntStream.range(0, numEmployees)
-//                .mapToObj(i -> createEmployeeDTO())
-//                .map(e -> {
-//                    e.setSkills(activities);
-//                    e.setDaysAvailable(Sets.newHashSet(date.getDayOfWeek()));
-//                    return userController.saveEmployee(e).getId();
-//                }).collect(Collectors.toList());
-//        CustomerDTO cust = userController.saveCustomer(createCustomerDTO());
-//        List<Long> petIds = IntStream.range(0, numPets)
-//                .mapToObj(i -> createPetDTO())
-//                .map(p -> {
-//                    p.setOwnerId(cust.getId());
-//                    return petController.savePet(p).getId();
-//                }).collect(Collectors.toList());
-//        return scheduleController.createSchedule(createScheduleDTO(petIds, employeeIds, date, activities));
-//    }
+    private ScheduleDTO populateSchedule(int numEmployees, int numPets, LocalDate date, Set<EmployeeSkillDTO> activities) {
+        Set<Long> employeeIds = IntStream.range(0, numEmployees)
+                .mapToObj(i -> createEmployeeDTO())
+                .map(e -> {
+                    e.setSkillLevels(activities);
+                    e.setDaysAvailable(Sets.newHashSet(date.getDayOfWeek()));
+                    return employeeController.saveEmployee(e).getBody().getId();
+                }).collect(Collectors.toSet());
+        CustomerDTO customerDTO = customerController.saveCustomer(createCustomerDTO()).getBody();
+        Set<Long> petIds = IntStream.range(0, numPets)
+                .mapToObj(i -> createPetDTO())
+                .map(p -> {
+                    p.setOwnerIds(List.of(customerDTO.getId()));
+                    return petController.savePet(p).getBody().getId();
+                }).collect(Collectors.toSet());
+        return scheduleController.createSchedule(createScheduleDTO(petIds, employeeIds, date, activities.stream().map(act -> act.getId()).collect(Collectors.toSet()))).getBody();
+    }
 
-//    private static void compareSchedules(ScheduleDTO sched1, ScheduleDTO sched2) {
-//        Assertions.assertEquals(sched1.getPetIds(), sched2.getPetIds());
-//        Assertions.assertEquals(sched1.getActivities(), sched2.getActivities());
-//        Assertions.assertEquals(sched1.getActivityIds(), sched2.getActivityIds());
-//        Assertions.assertEquals(sched1.getEmployeeIds(), sched2.getEmployeeIds());
-//        Assertions.assertEquals(sched1.getDate(), sched2.getDate());
-//    }
+    private static void compareSchedules(ScheduleDTO scheduleDTO1, ScheduleDTO scheduleDTO2) {
+        Assertions.assertEquals(scheduleDTO1.getPetIds(), scheduleDTO2.getPetIds());
+        Assertions.assertEquals(scheduleDTO1.getActivityIds(), scheduleDTO2.getActivityIds());
+        Assertions.assertEquals(scheduleDTO1.getActivityIds(), scheduleDTO2.getActivityIds());
+        Assertions.assertEquals(scheduleDTO1.getEmployeeIds(), scheduleDTO2.getEmployeeIds());
+        Assertions.assertEquals(scheduleDTO1.getDate(), scheduleDTO2.getDate());
+    }
 
 }
