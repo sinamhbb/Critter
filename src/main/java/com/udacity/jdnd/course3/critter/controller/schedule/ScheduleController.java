@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -30,34 +31,34 @@ public class ScheduleController {
     private final static ModelMapper mapper = new ModelMapper();
 
     static {
-        Converter<List<Long>, List<Employee>> listOfLongToListOfEmployees = ctx -> ctx.getSource().stream().map(Employee::new).collect(Collectors.toList());
-        Converter<List<Long>, List<EmployeeSkill>> listOfLongToListOfEmployeeSkills = ctx -> ctx.getSource().stream().map(EmployeeSkill::new).collect(Collectors.toList());
-        Converter<List<Long>, List<Pet>> listOfLongToListOfPets = ctx -> ctx.getSource().stream().map(Pet::new).collect(Collectors.toList());
-        Converter<List<Long>, List<Customer>> listOfLongToListOfCustomers = ctx -> ctx.getSource().stream().map(Customer::new).collect(Collectors.toList());
+        Converter<Set<Long>, Set<Employee>> setOfLongToSetOfEmployees = ctx -> ctx.getSource().stream().map(Employee::new).collect(Collectors.toSet());
+        Converter<Set<Long>, Set<EmployeeSkill>> setOfLongToSetOfEmployeeSkills = ctx -> ctx.getSource().stream().map(EmployeeSkill::new).collect(Collectors.toSet());
+        Converter<Set<Long>, Set<Pet>> setOfLongToSetOfPets = ctx -> ctx.getSource().stream().map(Pet::new).collect(Collectors.toSet());
+        Converter<Set<Long>, Set<Customer>> setOfLongToSetOfCustomers = ctx -> ctx.getSource().stream().map(Customer::new).collect(Collectors.toSet());
 
 
         TypeMap<ScheduleDTO, Schedule> DTOToScheduleTypeMap = mapper.createTypeMap(ScheduleDTO.class, Schedule.class);
         DTOToScheduleTypeMap.addMappings(
                 mapper -> {
-                    mapper.using(listOfLongToListOfEmployees).map(ScheduleDTO::getEmployeeIds, Schedule::setEmployees);
-                    mapper.using(listOfLongToListOfEmployeeSkills).map(ScheduleDTO::getActivityIds, Schedule::setActivities);
-                    mapper.using(listOfLongToListOfPets).map(ScheduleDTO::getPetIds, Schedule::setPets);
-                    mapper.using(listOfLongToListOfCustomers).map(ScheduleDTO::getCustomersIds, Schedule::setCustomers);
+                    mapper.using(setOfLongToSetOfEmployees).map(ScheduleDTO::getEmployeeIds, Schedule::setEmployees);
+                    mapper.using(setOfLongToSetOfEmployeeSkills).map(ScheduleDTO::getActivityIds, Schedule::setActivities);
+                    mapper.using(setOfLongToSetOfPets).map(ScheduleDTO::getPetIds, Schedule::setPets);
+                    mapper.using(setOfLongToSetOfCustomers).map(ScheduleDTO::getCustomersIds, Schedule::setCustomers);
                 });
 
 
-        Converter<List<Employee>, List<Long>> listOfEmployeesToListOfLong = ctx -> ctx.getSource().stream().map(User::getId).collect(Collectors.toList());
-        Converter<List<EmployeeSkill>, List<Long>> listOfEmployeeSkillsToListOfLong = ctx -> ctx.getSource().stream().map(EmployeeSkill::getId).collect(Collectors.toList());
-        Converter<List<Pet>, List<Long>> listOfPetToListOfLong = ctx -> ctx.getSource().stream().map(Pet::getId).collect(Collectors.toList());
-        Converter<List<Customer>, List<Long>> listOfCustomerToListOfLong = ctx -> ctx.getSource().stream().map(User::getId).collect(Collectors.toList());
+        Converter<Set<Employee>, Set<Long>> setOfEmployeesToSetOfLong = ctx -> ctx.getSource().stream().map(User::getId).collect(Collectors.toSet());
+        Converter<Set<EmployeeSkill>, Set<Long>> setOfEmployeeSkillsToSetOfLong = ctx -> ctx.getSource().stream().map(EmployeeSkill::getId).collect(Collectors.toSet());
+        Converter<Set<Pet>, Set<Long>> setOfPetToSetOfLong = ctx -> ctx.getSource().stream().map(Pet::getId).collect(Collectors.toSet());
+        Converter<Set<Customer>, Set<Long>> setOfCustomerToSetOfLong = ctx -> ctx.getSource().stream().map(User::getId).collect(Collectors.toSet());
 
         TypeMap<Schedule, ScheduleDTO> scheduleToDTOTypeMap = mapper.createTypeMap(Schedule.class, ScheduleDTO.class);
         scheduleToDTOTypeMap.addMappings(
                 mapper -> {
-                    mapper.using(listOfEmployeesToListOfLong).map(Schedule::getEmployees, ScheduleDTO::setEmployeeIds);
-                    mapper.using(listOfEmployeeSkillsToListOfLong).map(Schedule::getActivities, ScheduleDTO::setActivityIds);
-                    mapper.using(listOfPetToListOfLong).map(Schedule::getPets, ScheduleDTO::setPetIds);
-                    mapper.using(listOfCustomerToListOfLong).map(Schedule::getCustomers, ScheduleDTO::setCustomersIds);
+                    mapper.using(setOfEmployeesToSetOfLong).map(Schedule::getEmployees, ScheduleDTO::setEmployeeIds);
+                    mapper.using(setOfEmployeeSkillsToSetOfLong).map(Schedule::getActivities, ScheduleDTO::setActivityIds);
+                    mapper.using(setOfPetToSetOfLong).map(Schedule::getPets, ScheduleDTO::setPetIds);
+                    mapper.using(setOfCustomerToSetOfLong).map(Schedule::getCustomers, ScheduleDTO::setCustomersIds);
                 });
     }
 

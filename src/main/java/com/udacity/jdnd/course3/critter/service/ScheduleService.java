@@ -1,6 +1,8 @@
 package com.udacity.jdnd.course3.critter.service;
 
 
+import com.udacity.jdnd.course3.critter.domain.pet.Pet;
+import com.udacity.jdnd.course3.critter.domain.pet.PetRepository;
 import com.udacity.jdnd.course3.critter.domain.schedule.Schedule;
 import com.udacity.jdnd.course3.critter.domain.schedule.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +20,15 @@ public class ScheduleService {
     @Autowired
     private ScheduleRepository scheduleRepository;
 
+    @Autowired
+    private PetRepository petRepository;
+
     public Schedule createSchedule(Schedule schedule) {
         if (schedule.getDate().isAfter(LocalDate.now())) {
-            if (schedule.getPets().stream().anyMatch(pet -> pet.getCustomers().isEmpty())) {
+            if (schedule.getPets().stream().anyMatch(pet -> {
+                Pet retrievedPet = petRepository.findById(pet.getId()).get();
+                return retrievedPet.getCustomers().isEmpty();
+            })) {
                 throw new IllegalArgumentException("This Pet Doesn't Have an Owner");
             }
             return scheduleRepository.save(schedule);
