@@ -105,7 +105,7 @@ public class ScheduleController {
     }
 
     @GetMapping("/pet/{petId}")
-    public ResponseEntity<List<ScheduleDTO>> getScheduleForPet(@PathVariable long petId) throws Throwable {
+    public ResponseEntity<List<ScheduleDTO>> getScheduleForPet(@PathVariable long petId) {
         try {
             return ResponseEntity.ok(scheduleListToDTOList(scheduleService.getScheduleByPetsId(petId)));
         } catch (Throwable t) {
