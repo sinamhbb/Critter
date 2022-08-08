@@ -99,7 +99,6 @@ public class EmployeeController {
     @PutMapping
     public ResponseEntity<Set<EmployeeSkillDTO>> saveEmployeeSkills(@RequestBody Set<EmployeeSkillDTO> employeeSkillDTOs) {
         try {
-            Set<EmployeeSkill> employeeSkills = employeeService.saveEmployeeSkills(DTOSetToEmployeeSkillSet(employeeSkillDTOs));
             return ResponseEntity.ok(employeeSkillSetToDTOSet(employeeService.saveEmployeeSkills(DTOSetToEmployeeSkillSet(employeeSkillDTOs))));
         } catch (Throwable t) {
             System.out.println(t.getMessage());

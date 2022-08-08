@@ -62,12 +62,17 @@ public class EmployeeService {
     }
 
     public Set<EmployeeSkill> saveEmployeeSkills(Set<EmployeeSkill> employeeSkills) throws Throwable {
+        System.out.println("employeeSkills size : " + employeeSkills.size());
         Long employeeId = employeeSkills.stream().findFirst().orElseThrow(NullPointerException::new).getEmployee().getId();
         if(employeeSkills.stream().allMatch(employeeSkill -> Objects.equals(employeeSkill.getEmployee().getId(), employeeId))) {
             Employee employee = employeeRepository.findById(employeeId).orElseThrow(NoSuchElementException::new);
-
-            employeeSkills.forEach(employee::addSkillLevel);
-            return employeeRepository.save(employee).getSkillLevels();
+            Set<EmployeeSkill> savedEmployeeSkills = new HashSet<>();
+            employeeSkills.forEach(employeeSkill -> {
+                employeeSkill.setEmployee(employee);
+                EmployeeSkill savedEmployeeSkill = employeeSkillRepository.save(employeeSkill);
+                savedEmployeeSkills.add(savedEmployeeSkill);
+            });
+            return savedEmployeeSkills;
         }
         throw new Exception("Something went Wrong!");
     }
