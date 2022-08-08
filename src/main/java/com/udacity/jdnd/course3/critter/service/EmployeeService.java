@@ -39,21 +39,33 @@ public class EmployeeService {
     }
 
     public Employee saveEmployee(Employee employee) throws Throwable {
-        if(employee.getId() != null){
+        if(employee.getId() != 0L){
             employeeRepository.findById(employee.getId()).orElseThrow((Supplier<Throwable>) IndexOutOfBoundsException::new);
         }
+        Set<EmployeeSkill> employeeSkills = employee.getSkillLevels();
+        employee.setSkillLevels(new HashSet<>());
 
-        employee.getSkillLevels().forEach(employeeSkill -> {
-            employeeSkill.setEmployee(employee);
+        Employee savedEmployee =  employeeRepository.save(employee);
+        Set<EmployeeSkill> savedEmployeeSkills = new HashSet<>();
+        employeeSkills.forEach(employeeSkill -> {
+            employeeSkill.setEmployee(savedEmployee);
+            EmployeeSkill savedEmployeeSkill = employeeSkillRepository.save(employeeSkill);
+            System.out.println("hashcode of employeeSkill : " + savedEmployeeSkill.hashCode());
+            boolean answer = savedEmployeeSkills.add(savedEmployeeSkill);
+            System.out.println("size of Set : " + savedEmployeeSkills.size());
+            System.out.println("answer from Set : " + answer);
         });
-
-        return employeeRepository.save(employee);
+        Employee employeeToReturn = new Employee(savedEmployee.getDaysAvailable(),null,savedEmployeeSkills);
+        employeeToReturn.setId(savedEmployee.getId());
+        employeeToReturn.setName(savedEmployee.getName());
+        return employeeToReturn;
     }
 
     public Set<EmployeeSkill> saveEmployeeSkills(Set<EmployeeSkill> employeeSkills) throws Throwable {
         Long employeeId = employeeSkills.stream().findFirst().orElseThrow(NullPointerException::new).getEmployee().getId();
         if(employeeSkills.stream().allMatch(employeeSkill -> Objects.equals(employeeSkill.getEmployee().getId(), employeeId))) {
             Employee employee = employeeRepository.findById(employeeId).orElseThrow(NoSuchElementException::new);
+
             employeeSkills.forEach(employee::addSkillLevel);
             return employeeRepository.save(employee).getSkillLevels();
         }

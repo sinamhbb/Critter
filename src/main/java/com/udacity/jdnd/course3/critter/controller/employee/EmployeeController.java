@@ -1,12 +1,17 @@
 package com.udacity.jdnd.course3.critter.controller.employee;
 
 
+import com.udacity.jdnd.course3.critter.controller.schedule.ScheduleDTO;
 import com.udacity.jdnd.course3.critter.controller.skill.EmployeeSkillDTO;
+import com.udacity.jdnd.course3.critter.domain.schedule.Schedule;
 import com.udacity.jdnd.course3.critter.domain.skill.EmployeeSkill;
 import com.udacity.jdnd.course3.critter.domain.skill.Skill;
+import com.udacity.jdnd.course3.critter.domain.user.customer.Customer;
 import com.udacity.jdnd.course3.critter.domain.user.employee.Employee;
 import com.udacity.jdnd.course3.critter.service.EmployeeService;
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.DayOfWeek;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -22,6 +28,15 @@ import java.util.stream.Collectors;
 public class EmployeeController {
 
     private final static ModelMapper mapper = new ModelMapper();
+
+    static {
+        Converter<Set<EmployeeSkillDTO>, Set<EmployeeSkill>> employeeSkillSetToDTOSet = ctx -> ctx.getSource().stream().map(EmployeeController::DTOToEmployeeSkill).collect(Collectors.toSet());
+        TypeMap<EmployeeDTO, Employee> DTOToScheduleTypeMap = mapper.createTypeMap(EmployeeDTO.class, Employee.class);
+        DTOToScheduleTypeMap.addMappings(
+                mapper -> {
+                    mapper.using(employeeSkillSetToDTOSet).map(EmployeeDTO::getSkillLevels, Employee::setSkillLevels);
+                });
+    }
 
     private Employee DTOToEmployee(EmployeeDTO employeeDTO) {
         return mapper.map(employeeDTO, Employee.class);
@@ -36,7 +51,7 @@ public class EmployeeController {
         }.getType());
     }
 
-    private EmployeeSkill DTOToEmployeeSkill(EmployeeSkillDTO employeeSkillDTO) {
+    private static EmployeeSkill DTOToEmployeeSkill(EmployeeSkillDTO employeeSkillDTO) {
         return mapper.map(employeeSkillDTO, EmployeeSkill.class);
     }
 
@@ -44,12 +59,12 @@ public class EmployeeController {
         return mapper.map(employeeSkill, EmployeeSkillDTO.class);
     }
 
-    private Set<EmployeeSkill> DTOListToEmployeeSkillList(Set<EmployeeSkillDTO> employeeSkillDTOS) {
+    private Set<EmployeeSkill> DTOSetToEmployeeSkillSet(Set<EmployeeSkillDTO> employeeSkillDTOS) {
         return mapper.map(employeeSkillDTOS, new TypeToken<Set<EmployeeSkill>>() {
         }.getType());
     }
 
-    private Set<EmployeeSkillDTO> employeeSkillListToDTOList(Set<EmployeeSkill> employeeSkills) {
+    private Set<EmployeeSkillDTO> employeeSkillSetToDTOSet(Set<EmployeeSkill> employeeSkills) {
         return mapper.map(employeeSkills, new TypeToken<Set<EmployeeSkillDTO>>() {
         }.getType());
     }
@@ -71,8 +86,10 @@ public class EmployeeController {
     @PostMapping
     public ResponseEntity<EmployeeDTO> saveEmployee(@RequestBody EmployeeDTO employeeDTO) {
         try {
-            Employee employee = employeeService.saveEmployee(DTOToEmployee(employeeDTO));
-            return ResponseEntity.ok(employeeToDTO(employee));
+            Employee employee = DTOToEmployee(employeeDTO);
+            Employee savedEmployee = employeeService.saveEmployee(employee);
+            System.out.println("employee id in controller: " + savedEmployee.getId());
+            return ResponseEntity.ok(employeeToDTO(savedEmployee));
         } catch (Throwable t) {
             System.out.println(t.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(employeeDTO);
@@ -82,8 +99,8 @@ public class EmployeeController {
     @PutMapping
     public ResponseEntity<Set<EmployeeSkillDTO>> saveEmployeeSkills(@RequestBody Set<EmployeeSkillDTO> employeeSkillDTOs) {
         try {
-            Set<EmployeeSkill> employeeSkills = employeeService.saveEmployeeSkills(DTOListToEmployeeSkillList(employeeSkillDTOs));
-            return ResponseEntity.ok(employeeSkillListToDTOList(employeeService.saveEmployeeSkills(DTOListToEmployeeSkillList(employeeSkillDTOs))));
+            Set<EmployeeSkill> employeeSkills = employeeService.saveEmployeeSkills(DTOSetToEmployeeSkillSet(employeeSkillDTOs));
+            return ResponseEntity.ok(employeeSkillSetToDTOSet(employeeService.saveEmployeeSkills(DTOSetToEmployeeSkillSet(employeeSkillDTOs))));
         } catch (Throwable t) {
             System.out.println(t.getMessage());
             return ResponseEntity.badRequest().body(employeeSkillDTOs);
@@ -123,8 +140,11 @@ public class EmployeeController {
     @GetMapping("/availability")
     public ResponseEntity<Set<EmployeeDTO>> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeRequestDTO) {
         try {
+            System.out.println("num of emp: " + employeeRequestDTO.getSkills().stream().findFirst().get().getName());
             Set<Employee> employees = employeeService.getEmployeeBySkillName(employeeRequestDTO.getSkills().stream().map(Skill::getId).collect(Collectors.toSet()));
+            System.out.println("num of emp: " + employees.size());
             employees.removeIf(employee -> !employee.getDaysAvailable().contains(employeeRequestDTO.getDate().getDayOfWeek()));
+            System.out.println("num of emp: " + employees.size());
             Set<EmployeeDTO> employeeDTOS = employeeSetToDTOSet(employees);
             return ResponseEntity.ok(employeeDTOS);
         } catch (Throwable t) {
