@@ -1,6 +1,10 @@
 package com.udacity.jdnd.course3.critter.domain.user;
 
 
+/*
+User class is a MappedSuperclass. This means that this class doesn't have a table by itself but rather is a class that the child class will inherit attributes from.
+*/
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,7 +34,4 @@ public class User {
     @Nationalized
     @Column(length = 100)
     private String name;
-
-
-
 }

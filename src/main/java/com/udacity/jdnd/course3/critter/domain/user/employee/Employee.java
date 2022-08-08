@@ -14,6 +14,10 @@ import java.time.DayOfWeek;
 import java.util.HashSet;
 import java.util.Set;
 
+/*
+Employee class is a polymorphic type that inherits attributes from User.java . This will allow this class to have its own table and Repository to access it.
+*/
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
