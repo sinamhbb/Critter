@@ -12,6 +12,12 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/*
+Customer class is a polymorphic type that inherits attributes from User.java . This will allow this class to have its own table and Repository to access it.
+*/
+
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
