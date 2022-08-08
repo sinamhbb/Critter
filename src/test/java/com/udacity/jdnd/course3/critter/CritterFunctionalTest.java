@@ -4,25 +4,26 @@ import com.google.common.collect.Sets;
 import com.udacity.jdnd.course3.critter.controller.employee.EmployeeController;
 import com.udacity.jdnd.course3.critter.controller.employee.EmployeeDTO;
 import com.udacity.jdnd.course3.critter.controller.employee.EmployeeRequestDTO;
-//import com.udacity.jdnd.course3.critter.controller.employee.EmployeeSkill;
 import com.udacity.jdnd.course3.critter.controller.pet.PetController;
 import com.udacity.jdnd.course3.critter.controller.pet.PetDTO;
 import com.udacity.jdnd.course3.critter.controller.pet.PetTypeController;
 import com.udacity.jdnd.course3.critter.controller.schedule.ScheduleController;
-//import com.udacity.jdnd.course3.critter.controller.user.*;
 import com.udacity.jdnd.course3.critter.controller.schedule.ScheduleDTO;
 import com.udacity.jdnd.course3.critter.controller.customer.*;
 import com.udacity.jdnd.course3.critter.controller.skill.EmployeeSkillDTO;
 import com.udacity.jdnd.course3.critter.controller.skill.SkillController;
 import com.udacity.jdnd.course3.critter.domain.pet.PetType;
 import com.udacity.jdnd.course3.critter.domain.skill.Skill;
+import com.udacity.jdnd.course3.critter.domain.user.employee.Employee;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,23 +41,15 @@ import java.util.stream.IntStream;
  * Students will need to configure the application to run these tests by adding application.properties file
  * to the test/resources directory that specifies the datasource. It can run using an in-memory H2 instance
  * and should not try to re-use the same datasource used by the rest of the app.
- *
+ * <p>
  * These tests should all pass once the project is complete.
  *
- *
- *
- * @SpringBootTest
- * This annotation goes on your unit test class. creates an entire Spring ApplicationContext when running unit tests. It is used if you need to test controller or service classes, or perform integration tests spanning multiple layers.
- *
- * @DataJpaTest
- * This annotation provides an alternate way to test your data layer without providing an application.properties file. It disables Spring autoconfiguration and automatically uses an in-memory database if available. It only loads Entities and Spring Data JPA repositories, but not your Services or Controllers.
- *
+ * @SpringBootTest This annotation goes on your unit test class. creates an entire Spring ApplicationContext when running unit tests. It is used if you need to test controller or service classes, or perform integration tests spanning multiple layers.
+ * @DataJpaTest This annotation provides an alternate way to test your data layer without providing an application.properties file. It disables Spring autoconfiguration and automatically uses an in-memory database if available. It only loads Entities and Spring Data JPA repositories, but not your Services or Controllers.
+ * <p>
  * TestEntityManager
  * TestEntityManager is a class provided by Spring Boot that provides useful methods for persisting test data inside persistence unit tests. It is still available in @DataJpaTests despite the rest of the app not being wired up.
- *
- * @AutoConfigureTestDatabase
- * This annotation can be used with either @SpringBootTest or @DataJpaTest. You can use it to customize Spring’s behavior for replacing the normal datasource. For example, the following annotation could be used in conjunction with @DataJpaTest to indicate that Spring should NOT replace the datasource with an in-memory datasource.
- *
+ * @AutoConfigureTestDatabase This annotation can be used with either @SpringBootTest or @DataJpaTest. You can use it to customize Spring’s behavior for replacing the normal datasource. For example, the following annotation could be used in conjunction with @DataJpaTest to indicate that Spring should NOT replace the datasource with an in-memory datasource.
  * @AutoConfigureTestDatabase(replace=Replace.NONE)
  */
 @Transactional
@@ -84,7 +77,7 @@ public class CritterFunctionalTest {
     private ScheduleController scheduleController;
 
     @Test
-    public void a_testCreateCustomer(){
+    public void a_testCreateCustomer() {
         CustomerDTO customerDTO = createCustomerDTO();
         CustomerDTO newCustomer = customerController.saveCustomer(customerDTO).getBody();
         CustomerDTO retrievedCustomer = customerController.getCustomer(newCustomer.getId()).getBody();
@@ -94,7 +87,7 @@ public class CritterFunctionalTest {
     }
 
     @Test
-    public void b_testCreateEmployee(){
+    public void b_testCreateEmployee() {
         EmployeeDTO employeeDTO = createEmployeeDTO();
         EmployeeDTO newEmployee = employeeController.saveEmployee(employeeDTO).getBody();
         EmployeeDTO retrievedEmployee = employeeController.getEmployee(newEmployee.getId()).getBody();
@@ -110,15 +103,12 @@ public class CritterFunctionalTest {
 
         CustomerDTO customerDTO = createCustomerDTO();
         CustomerDTO newCustomer = customerController.saveCustomer(customerDTO).getBody();
-        System.out.println("new Customer ID: " + newCustomer.getId());
 
 
         PetDTO petDTO = createPetDTO();
         petDTO.setType(petType);
         petDTO.setOwnerIds(List.of(newCustomer.getId()));
         PetDTO newPet = petController.savePet(petDTO).getBody();
-        System.out.println("new Pet ID: " + newPet.getId());
-        System.out.println("new Pet ownerId: " + newPet.getOwnerIds().get(0));
 
         //make sure pet contains customer id
         PetDTO retrievedPet = petController.getPet(newPet.getId()).getBody();
@@ -128,11 +118,9 @@ public class CritterFunctionalTest {
         List<PetDTO> pets = petController.getPetsByOwner(newCustomer.getId()).getBody();
         Assertions.assertEquals(newPet.getId(), pets.get(0).getId());
         Assertions.assertEquals(newPet.getName(), pets.get(0).getName());
-        System.out.println("ownerIds: " + retrievedPet.getOwnerIds().get(0));
 
         //check to make sure customer now also contains pet
         CustomerDTO retrievedCustomer = customerController.getCustomer(newCustomer.getId()).getBody();
-        System.out.println("Pet Id from customer:" + retrievedCustomer.getPetIds().get(0));
         Assertions.assertTrue(retrievedCustomer.getPetIds() != null && retrievedCustomer.getPetIds().size() > 0);
         Assertions.assertEquals(retrievedCustomer.getPetIds().get(0), retrievedPet.getId());
     }
@@ -161,12 +149,10 @@ public class CritterFunctionalTest {
     public void e_testFindOwnerByPet() throws Throwable {
         CustomerDTO customerDTO = createCustomerDTO();
         CustomerDTO newCustomer = customerController.saveCustomer(customerDTO).getBody();
-        System.out.println("new customer id: " + newCustomer.getId());
 
         PetDTO petDTO = createPetDTO();
         petDTO.setOwnerIds(List.of(newCustomer.getId()));
         PetDTO newPet = petController.savePet(petDTO).getBody();
-        System.out.println("pet id: " + newPet.getId());
 
         CustomerDTO owner = customerController.getOwnerByPet(newPet.getId()).getBody().get(0);
         Assertions.assertEquals(owner.getId(), newCustomer.getId());
@@ -188,22 +174,24 @@ public class CritterFunctionalTest {
 
     @Test
     public void g_testFindEmployeesByServiceAndTime() {
-        EmployeeDTO emp1 = createEmployeeDTO();
-        EmployeeDTO emp2 = createEmployeeDTO();
-        EmployeeDTO emp3 = createEmployeeDTO();
 
         Skill feedingSkill = skillController.saveSkill(new Skill(null, "FEEDING")).getBody();
         Skill pettingSkill = skillController.saveSkill(new Skill(null, "PETTING")).getBody();
         Skill walkingSkill = skillController.saveSkill(new Skill(null, "WALKING")).getBody();
         Skill shavingSkill = skillController.saveSkill(new Skill(null, "SHAVING")).getBody();
 
+        EmployeeDTO emp1 = createEmployeeDTO();
+        EmployeeDTO emp2 = createEmployeeDTO();
+        EmployeeDTO emp3 = createEmployeeDTO();
+
+
         emp1.setDaysAvailable(Sets.newHashSet(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY));
         emp2.setDaysAvailable(Sets.newHashSet(DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY));
         emp3.setDaysAvailable(Sets.newHashSet(DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY));
 
-        emp1.setSkillLevels(Sets.newHashSet(new EmployeeSkillDTO(null,feedingSkill, 5,null), new EmployeeSkillDTO(null,pettingSkill, 5,null)));
-        emp2.setSkillLevels(Sets.newHashSet(Sets.newHashSet(new EmployeeSkillDTO(null,pettingSkill, 5,null), new EmployeeSkillDTO(null,walkingSkill, 5,null))));
-        emp3.setSkillLevels(Sets.newHashSet(Sets.newHashSet(new EmployeeSkillDTO(null,walkingSkill, 5,null), new EmployeeSkillDTO(null,shavingSkill, 5,null))));
+        emp1.setSkillLevels(Sets.newHashSet(new EmployeeSkillDTO(null, feedingSkill, 5, null), new EmployeeSkillDTO(null, pettingSkill, 5, null)));
+        emp2.setSkillLevels(Sets.newHashSet(new EmployeeSkillDTO(null, pettingSkill, 5, null), new EmployeeSkillDTO(null, walkingSkill, 5, null)));
+        emp3.setSkillLevels(Sets.newHashSet(new EmployeeSkillDTO(null, walkingSkill, 5, null), new EmployeeSkillDTO(null, shavingSkill, 5, null)));
 
         EmployeeDTO emp1n = employeeController.saveEmployee(emp1).getBody();
         EmployeeDTO emp2n = employeeController.saveEmployee(emp2).getBody();
@@ -215,8 +203,9 @@ public class CritterFunctionalTest {
         er1.setSkills(Sets.newHashSet(pettingSkill));
 
         Set<Long> eIds1 = employeeController.findEmployeesForService(er1).getBody().stream().map(EmployeeDTO::getId).collect(Collectors.toSet());
-        Set<Long> eIds1expected = Sets.newHashSet( emp2n.getId());
-        Assertions.assertEquals(eIds1, eIds1expected);
+        Set<Long> eIds1expected = Sets.newHashSet(emp2n.getId());
+        Assertions.assertEquals(true, eIds1.contains(eIds1expected.stream().findFirst().get()));
+//        Assertions.assertEquals(eIds1, eIds1expected);
 
         //make a request that matches only employee 3
         EmployeeRequestDTO er2 = new EmployeeRequestDTO();
@@ -229,13 +218,27 @@ public class CritterFunctionalTest {
     }
 
     @Test
+    public void h_testSaveEmployeeAndSKills() {
+        Skill feedingSkill = skillController.saveSkill(new Skill(null, "FEEDING")).getBody();
+        Skill pettingSkill = skillController.saveSkill(new Skill(null, "PETTING")).getBody();
+        Assertions.assertNotNull(feedingSkill.getId());
+        System.out.println("feedingSkill id: " + feedingSkill.getId());
+        EmployeeDTO employeeTemp = createEmployeeDTO();
+        employeeTemp.setSkillLevels(Sets.newHashSet(new EmployeeSkillDTO(null, feedingSkill, 5, null), new EmployeeSkillDTO(null, pettingSkill, 5, null)));
+        EmployeeDTO employeeDTO = employeeController.saveEmployee(employeeTemp).getBody();
+
+//        System.out.println("here: " + employeeDTO.getId());
+        Assertions.assertEquals(employeeDTO.getSkillLevels().stream().findFirst().get().getEmployeeId(), employeeDTO.getId());
+    }
+
+    @Test
     public void h_testSchedulePetsForServiceWithEmployee() {
 
         Skill feedingSkill = skillController.saveSkill(new Skill(null, "FEEDING")).getBody();
         Skill pettingSkill = skillController.saveSkill(new Skill(null, "PETTING")).getBody();
 
         EmployeeDTO employeeTemp = createEmployeeDTO();
-        employeeTemp.setSkillLevels(Sets.newHashSet(new EmployeeSkillDTO(null,feedingSkill, 5,null), new EmployeeSkillDTO(null,pettingSkill, 5,null)));
+        employeeTemp.setSkillLevels(Sets.newHashSet(new EmployeeSkillDTO(null, feedingSkill, 5, null), new EmployeeSkillDTO(null, pettingSkill, 5, null)));
         employeeTemp.setDaysAvailable(Sets.newHashSet(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY));
         EmployeeDTO employeeDTO = employeeController.saveEmployee(employeeTemp).getBody();
 
@@ -251,7 +254,7 @@ public class CritterFunctionalTest {
         petIds.add(petDTO.getId());
         Set<Long> employeeIds = new HashSet<>();
         employeeIds.add(employeeDTO.getId());
-        Set<EmployeeSkillDTO> skillSet =  employeeDTO.getSkillLevels();
+        Set<EmployeeSkillDTO> skillSet = employeeDTO.getSkillLevels();
 
         scheduleController.createSchedule(createScheduleDTO(petIds, Set.of(customerDTO.getId()), employeeIds, date, skillSet.stream().map(EmployeeSkillDTO::getId).collect(Collectors.toSet())));
         ScheduleDTO scheduleDTO = scheduleController.getAllSchedules().getBody().get(0);
@@ -270,9 +273,8 @@ public class CritterFunctionalTest {
         Skill walkingSkill = skillController.saveSkill(new Skill(null, "WALKING")).getBody();
         Skill shavingSkill = skillController.saveSkill(new Skill(null, "SHAVING")).getBody();
 
-        ScheduleDTO schedule1 = populateSchedule(1, 2, LocalDate.now().plusDays(1), Sets.newHashSet(new EmployeeSkillDTO(null,pettingSkill, 5,null), new EmployeeSkillDTO(null,walkingSkill, 5,null)));
-        ScheduleDTO schedule2 = populateSchedule(3, 1, LocalDate.now().plusDays(2), Sets.newHashSet(new EmployeeSkillDTO(null,pettingSkill, 5,null), new EmployeeSkillDTO(null,shavingSkill, 5,null)));
-        System.out.println("schedule1 Id; " + schedule1.getActivityIds().stream().findFirst());
+        ScheduleDTO schedule1 = populateSchedule(1, 2, LocalDate.now().plusDays(1), Sets.newHashSet(new EmployeeSkillDTO(null, pettingSkill, 5, null), new EmployeeSkillDTO(null, walkingSkill, 5, null)));
+        ScheduleDTO schedule2 = populateSchedule(3, 1, LocalDate.now().plusDays(2), Sets.newHashSet(new EmployeeSkillDTO(null, pettingSkill, 5, null), new EmployeeSkillDTO(null, shavingSkill, 5, null)));
         //add a third schedule that shares some employees and pets with the other schedules
         ScheduleDTO schedule3 = new ScheduleDTO();
         schedule3.setEmployeeIds(schedule1.getEmployeeIds());
@@ -317,13 +319,14 @@ public class CritterFunctionalTest {
     }
 
 
-
     private static EmployeeDTO createEmployeeDTO() {
         EmployeeDTO employeeDTO = new EmployeeDTO();
+        employeeDTO.setId(0L);
         employeeDTO.setName("TestEmployee");
         employeeDTO.setSkillLevels(new HashSet<>());
         return employeeDTO;
     }
+
     private static CustomerDTO createCustomerDTO() {
         CustomerDTO customerDTO = new CustomerDTO();
         customerDTO.setId(0L);
@@ -369,7 +372,6 @@ public class CritterFunctionalTest {
                     e.setSkillLevels(activities);
                     e.setDaysAvailable(Sets.newHashSet(date.getDayOfWeek()));
                     EmployeeDTO employee = employeeController.saveEmployee(e).getBody();
-                    System.out.println("activity id in employee: " + employee.getSkillLevels().stream().findFirst().get().getId());
                     activityIds.addAll(employee.getSkillLevels().stream().map(EmployeeSkillDTO::getId).collect(Collectors.toSet()));
                     return employee.getId();
                 }).collect(Collectors.toSet());
@@ -385,8 +387,7 @@ public class CritterFunctionalTest {
 
     private static void compareSchedules(ScheduleDTO scheduleDTO1, ScheduleDTO scheduleDTO2) {
         Assertions.assertEquals(scheduleDTO1.getPetIds(), scheduleDTO2.getPetIds());
-//        Assertions.assertEquals(scheduleDTO1.getActivityIds(), scheduleDTO2.getActivityIds());
-        Assertions.assertEquals(true,scheduleDTO1.getActivityIds().contains(scheduleDTO2.getActivityIds().stream().findFirst().get()));
+        Assertions.assertEquals(true, scheduleDTO1.getActivityIds().contains(scheduleDTO2.getActivityIds().stream().findFirst().get()));
         Assertions.assertEquals(scheduleDTO1.getEmployeeIds(), scheduleDTO2.getEmployeeIds());
         Assertions.assertEquals(scheduleDTO1.getDate(), scheduleDTO2.getDate());
     }
