@@ -46,19 +46,11 @@ public class EmployeeService {
         employee.setSkillLevels(new HashSet<>());
 
         Employee savedEmployee =  employeeRepository.save(employee);
-        Set<EmployeeSkill> savedEmployeeSkills = new HashSet<>();
-        employeeSkills.forEach(employeeSkill -> {
-            employeeSkill.setEmployee(savedEmployee);
-            EmployeeSkill savedEmployeeSkill = employeeSkillRepository.save(employeeSkill);
-            System.out.println("hashcode of employeeSkill : " + savedEmployeeSkill.hashCode());
-            boolean answer = savedEmployeeSkills.add(savedEmployeeSkill);
-            System.out.println("size of Set : " + savedEmployeeSkills.size());
-            System.out.println("answer from Set : " + answer);
-        });
-        Employee employeeToReturn = new Employee(savedEmployee.getDaysAvailable(),null,savedEmployeeSkills);
-        employeeToReturn.setId(savedEmployee.getId());
-        employeeToReturn.setName(savedEmployee.getName());
-        return employeeToReturn;
+        employeeSkills.forEach(savedEmployee::addSkillLevel);
+//        Employee employeeToReturn = new Employee(savedEmployee.getDaysAvailable(),null,savedEmployee.getSkillLevels());
+//        employeeToReturn.setId(savedEmployee.getId());
+//        employeeToReturn.setName(savedEmployee.getName());
+        return savedEmployee;
     }
 
     public Set<EmployeeSkill> saveEmployeeSkills(Set<EmployeeSkill> employeeSkills) throws Throwable {

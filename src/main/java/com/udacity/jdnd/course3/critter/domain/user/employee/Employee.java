@@ -27,7 +27,7 @@ public class Employee extends User {
     @ManyToMany(mappedBy = "employees")
     private Set<Schedule> schedules = new HashSet<>();;
 
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "employee", orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<EmployeeSkill> skillLevels = new HashSet<>();
 
 
