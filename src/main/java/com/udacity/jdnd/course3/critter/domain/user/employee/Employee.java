@@ -49,7 +49,5 @@ public class Employee extends User {
         skillLevels.remove( employeeSkill );
         employeeSkill.setEmployee( null );
     }
-
-
 }
 
